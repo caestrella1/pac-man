@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:/Users/Carlos/Software/Projects/Personal/PAC-MAN 2017/Application Files/MazeData.h">
+   </FileRef>
+   <Group
+      location = "container:"
+      name = "New Group">
+   </Group>
+   <FileRef
+      location = "group:/Users/Carlos/Software/Projects/Personal/PAC-MAN 2017/Application Files/Platform.h">
+   </FileRef>
+   <FileRef
+      location = "self:">
+   </FileRef>
+</Workspace>
