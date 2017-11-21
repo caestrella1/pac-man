@@ -401,11 +401,11 @@ void MazeData::setValidNodeMovements() {
 }
 
 void MazeData::teleportPlayer(Player &player) {
-    if (player.getPosition().x <= 0) {
-        player.setPosition(Vector2f(WinX, player.getPosition().y));
+    if (player.getPosition().x <= 100) {
+        player.setPosition(Vector2f(WinX - 100, player.getPosition().y));
     }
-    else if (player.getPosition().x >= WinX) {
-        player.setPosition(Vector2f(0, player.getPosition().y));
+    else if (player.getPosition().x >= WinX - 100) {
+        player.setPosition(Vector2f(100, player.getPosition().y));
     }
 }
 

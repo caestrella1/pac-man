@@ -10,7 +10,7 @@
 
 int main() {
     /*** WINDOW & CLOCKS ***/
-    RenderWindow window(VideoMode(WinX, WinY), "PAC-MAN '17", Style::Default);
+    RenderWindow window(VideoMode(WinX, WinY), "PAC-MAN 2017", Style::Default);
 
 //    window.setMouseCursorVisible(false);
     window.setKeyRepeatEnabled(false);
@@ -235,20 +235,6 @@ int main() {
                 ResizeView(window, view);
                 gamestate = PAUSED;
                 soundSwitcher(isEdible, gamestate, siren, scatter);
-            }
-            
-            if (checkEvent.type == Event::KeyPressed) { // NEW GAME
-                if (checkEvent.key.code == Keyboard::N && checkEvent.key.control) {
-                    resetOnGameOver(pacman, blinky, inky, pinky, clyde, maze, edibleTime);
-                    resetStats(lifeCount, pelletCount, score, lifeScore, level, looppitch, fruit, ss, scoreValue, startClock, deltaTime);
-                    soundSwitcher(isEdible, gamestate, siren, scatter);
-                    
-                    theme.play();
-                    eatfruit.play();
-                    isEdible = false;
-                    startInit = false;
-                    gamestate = STARTING;
-                }
             }
             
 
