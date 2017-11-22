@@ -7,43 +7,62 @@
 //
 #include "Player.hpp"
 #include <time.h>
+#include <iostream>
 
-Player::Player(Texture* texture, Vector2u imageCount, float switchTime, float speed) :
-	animate(texture, imageCount, switchTime)
-{
-	this->speed = speed;
-	playerstate = 0;
-
-	body.setSize(Vector2f(spriteSize, spriteSize));
-	body.setPosition(Vector2f(0, 0));
-	body.setOrigin(body.getSize() / 2.0f);
-	body.setTexture(texture);
-	srand(time(NULL));
+Player::Player(float speed) {
+    pause();
 }
 
-void Player::setPosition(Vector2f position) {
-	body.setPosition(position.x, position.y);
+Player::Player(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
+    IntRect textrect(0, 0, spritesize, spritesize);
+    TextureRect = textrect;
+    
+    setOrigin(spritesize / 2, spritesize / 2);
+    objtexture.loadFromFile(resourcePath() + "Graphics/" + spritesheet);
+    state = new Animation[numberofStates];
+    
+    for (int i = 0; i < numberofStates; i++) {
+        state[i].setSpriteSheet(objtexture);
+        
+        for (int j = 0; j < framesperState; j++) {
+            state[i].addFrame(IntRect(j * spritesize, i * spritesize, spritesize, spritesize));
+        }
+    }
+    setAnimation(state[0]);
+    pause();
 }
 
-void Player::setTexture(Texture* texture) {
-	body.setTexture(texture);
+void Player::initialize(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
+    setOrigin(spritesize / 2, spritesize / 2);
+    objtexture.loadFromFile(resourcePath() + "Graphics/" + spritesheet);
+    state = new Animation[numberofStates];
+    
+    for (int i = 0; i < numberofStates; i++) {
+        state[i].setSpriteSheet(objtexture);
+        
+        for (int j = 0; j < framesperState; j++) {
+            state[i].addFrame(IntRect(j * spritesize, i * spritesize, spritesize, spritesize));
+        }
+    }
+    setAnimation(state[0]);
+    play();
 }
 
-void Player::setSwitchTime(float newSwitchTime) {
-	this->animate.switchTime = newSwitchTime;
+void Player::switchState(size_t playerstate) {
+    pstate = playerstate;
+    play(state[playerstate]);
 }
 
-void Player::setSpeed(float newSpeed) {
-	this->speed = newSpeed;
+void Player::setPlayerSpeed(float speed) {
+    speed_ = speed;
 }
 
-void Player::setFrame(int newFrame) {
-	this->animate.currentFrame.x = newFrame;
+void Player::setAnimationSpeed(float speed) {
+    setFrameTime(seconds(speed));
 }
 
-void Player::update(float deltaTime, int gamestate) {
-	animate.Update(playerstate, deltaTime);
-	body.setTextureRect(animate.uvRect);
+IntRect Player::getTextureRect() {
+    return TextureRect;
 }
 
 bool Player::isCurrentDirectionValid(Node node, int choosedirection) {
@@ -63,26 +82,26 @@ bool Player::isCurrentDirectionValid(Node node, int choosedirection) {
 }
 
 void Player::nextDirection() {
-	if (WASDkeys) {
-		if (Keyboard::isKeyPressed(Keyboard::D))
-			queueDirection = RIGHT;
-		else if (Keyboard::isKeyPressed(Keyboard::A))
-			queueDirection = LEFT;
-		else if (Keyboard::isKeyPressed(Keyboard::W))
-			queueDirection = UP;
-		else if (Keyboard::isKeyPressed(Keyboard::S))
-			queueDirection = DOWN;
-	}
-	else {
-		if (Keyboard::isKeyPressed(Keyboard::Right))
-			queueDirection = RIGHT;
-		else if (Keyboard::isKeyPressed(Keyboard::Left))
-			queueDirection = LEFT;
-		else if (Keyboard::isKeyPressed(Keyboard::Up))
-			queueDirection = UP;
-		else if (Keyboard::isKeyPressed(Keyboard::Down))
-			queueDirection = DOWN;
-	}
+    if (WASDkeys) {
+        if (Keyboard::isKeyPressed(Keyboard::D))
+            queueDirection = RIGHT;
+        else if (Keyboard::isKeyPressed(Keyboard::A))
+            queueDirection = LEFT;
+        else if (Keyboard::isKeyPressed(Keyboard::W))
+            queueDirection = UP;
+        else if (Keyboard::isKeyPressed(Keyboard::S))
+            queueDirection = DOWN;
+    }
+    else {
+        if (Keyboard::isKeyPressed(Keyboard::Right))
+            queueDirection = RIGHT;
+        else if (Keyboard::isKeyPressed(Keyboard::Left))
+            queueDirection = LEFT;
+        else if (Keyboard::isKeyPressed(Keyboard::Up))
+            queueDirection = UP;
+        else if (Keyboard::isKeyPressed(Keyboard::Down))
+            queueDirection = DOWN;
+    }
 }
 
 void Player::setDirectionAtNode(Node node) {
@@ -129,116 +148,113 @@ void Player::setDirectionAtNode(Node node) {
 }
 
 void Player::setDirectionOpposite() {
-	if (WASDkeys) {
-		if (direction == RIGHT)
-			if (Keyboard::isKeyPressed(Keyboard::A))
-				direction = LEFT;
-		if (direction == LEFT)
-			if (Keyboard::isKeyPressed(Keyboard::D))
-				direction = RIGHT;
-		if (direction == UP)
-			if (Keyboard::isKeyPressed(Keyboard::S))
-				direction = DOWN;
-		if (direction == DOWN)
-			if (Keyboard::isKeyPressed(Keyboard::W))
-				direction = UP;
-	}
-	else {
-		if (direction == RIGHT)
-			if (Keyboard::isKeyPressed(Keyboard::Left))
-				direction = LEFT;
-		if (direction == LEFT)
-			if (Keyboard::isKeyPressed(Keyboard::Right))
-				direction = RIGHT;
-		if (direction == UP)
-			if (Keyboard::isKeyPressed(Keyboard::Down))
-				direction = DOWN;
-		if (direction == DOWN)
-			if (Keyboard::isKeyPressed(Keyboard::Up))
-				direction = UP;
-	}
+    if (WASDkeys) {
+        if (direction == RIGHT)
+            if (Keyboard::isKeyPressed(Keyboard::A))
+                direction = LEFT;
+        if (direction == LEFT)
+            if (Keyboard::isKeyPressed(Keyboard::D))
+                direction = RIGHT;
+        if (direction == UP)
+            if (Keyboard::isKeyPressed(Keyboard::S))
+                direction = DOWN;
+        if (direction == DOWN)
+            if (Keyboard::isKeyPressed(Keyboard::W))
+                direction = UP;
+    }
+    else {
+        if (direction == RIGHT)
+            if (Keyboard::isKeyPressed(Keyboard::Left))
+                direction = LEFT;
+        if (direction == LEFT)
+            if (Keyboard::isKeyPressed(Keyboard::Right))
+                direction = RIGHT;
+        if (direction == UP)
+            if (Keyboard::isKeyPressed(Keyboard::Down))
+                direction = DOWN;
+        if (direction == DOWN)
+            if (Keyboard::isKeyPressed(Keyboard::Up))
+                direction = UP;
+    }
 }
 
-void Player::movePlayer(float deltaTime) {
-	movement.x = 0.0;
-	movement.y = 0.0;
+void Player::movePlayer(Time deltaTime) {
+    movement.x = 0.0;
+    movement.y = 0.0;
 
-	if (direction == RIGHT) {
-		body.setRotation(0);
-		movement.x = speed * deltaTime;
-	}
-	else if (direction == LEFT) {
-		body.setRotation(180);
-		movement.x = -speed * deltaTime;
-	}
-	else if (direction == UP) {
-		body.setRotation(270);
-		movement.y = -speed * deltaTime;
-	}
-	else if (direction == DOWN) {
-		body.setRotation(90);
-		movement.y = speed * deltaTime;
-	}
+    if (direction == RIGHT) {
+        setRotation(0);
+        movement.x = speed_ * deltaTime.asSeconds();
+    }
+    else if (direction == LEFT) {
+        setRotation(180);
+        movement.x = -speed_ * deltaTime.asSeconds();
+    }
+    else if (direction == UP) {
+        setRotation(270);
+        movement.y = -speed_ * deltaTime.asSeconds();
+    }
+    else if (direction == DOWN) {
+        setRotation(90);
+        movement.y = speed_ * deltaTime.asSeconds();
+    }
 
-	body.move(movement);
+    move(movement);
 }
 
-void Player::moveGhost(float deltaTime) {
-	movement.x = 0.0;
-	movement.y = 0.0;
+void Player::moveGhost(Time deltaTime) {
+    movement.x = 0.0;
+    movement.y = 0.0;
 
-	if (direction == RIGHT) {
-		movement.x = speed * deltaTime;
-		playerstate = FACERIGHT;
-	}
-	else if (direction == LEFT) {
-		movement.x = -speed * deltaTime;
-		playerstate = FACELEFT;
-	}
-	else if (direction == UP) {
-		movement.y = -speed * deltaTime;
-		playerstate = FACEUP;
-	}
-	else if (direction == DOWN) {
-		movement.y = speed * deltaTime;
-		playerstate = FACEDOWN;
-	}
+    if (direction == RIGHT) {
+        movement.x = speed_ * deltaTime.asSeconds();
+        switchState(FACERIGHT);
+    }
+    else if (direction == LEFT) {
+        movement.x = -speed_ * deltaTime.asSeconds();
+        switchState(FACELEFT);
+    }
+    else if (direction == UP) {
+        movement.y = -speed_ * deltaTime.asSeconds();
+        switchState(FACEUP);
+    }
+    else if (direction == DOWN) {
+        movement.y = speed_ * deltaTime.asSeconds();
+        switchState(FACEDOWN);
+    }
 
-	body.move(movement);
+    move(movement);
 }
 
-void Player::blinkyAI(float deltaTime, Player pacman) {
-	/*	BLINKY LOGIC:
-		Follows directly behind PAC-MAN
-		Always first out of ghost pen
-	*/
-	queueDirection = rand() % 4;
+void Player::blinkyAI(Time deltaTime, Player pacman) {
+    /*    BLINKY LOGIC:
+        Follows directly behind PAC-MAN
+        Always first out of ghost pen
+    */
+    queueDirection = rand() % 4;
 }
 
-void Player::inkyAI(float deltaTime, Player pacman) {
-	/*	INKY LOGIC:
-		Uses PAC-MAN's position/direction and Blinky's position
-		Exits ghost pen after PAC-MAN eats 30 pellets
-	*/
-	queueDirection = rand() % 4;
+void Player::inkyAI(Time deltaTime, Player pacman) {
+    /*    INKY LOGIC:
+        Uses PAC-MAN's position/direction and Blinky's position
+        Exits ghost pen after PAC-MAN eats 30 pellets
+    */
+    queueDirection = rand() % 4;
 }
 
-void Player::pinkyAI(float deltaTime, Player pacman) {
-	/*	PINKY LOGIC:
-		Ambushes PAC-MAN by positioning himself in his way
-		Second out of pen, right on game start
-	*/
-	queueDirection = rand() % 4;
+void Player::pinkyAI(Time deltaTime, Player pacman) {
+    /*    PINKY LOGIC:
+        Ambushes PAC-MAN by positioning himself in his way
+        Second out of pen, right on game start
+    */
+    queueDirection = rand() % 4;
 }
 
-void Player::clydeAI(float deltaTime, Player pacman) {
-	/*	CLYDE LOGIC:
-		Follows directly behind PAC-MAN like Blinky but scatters once he's too close
-		Exits pen after 1/3 of pellets are eaten
-	*/
-	queueDirection = rand() % 4;
+void Player::clydeAI(Time deltaTime, Player pacman) {
+    /*    CLYDE LOGIC:
+        Follows directly behind PAC-MAN like Blinky but scatters once he's too close
+        Exits pen after 1/3 of pellets are eaten
+    */
+    queueDirection = rand() % 4;
 }
 
-void Player::draw(RenderWindow& window) {
-	window.draw(body);
-}

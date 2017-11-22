@@ -21,23 +21,6 @@ using namespace sf;
 #define pelletSize 8
 #define powerPelletSize 26
 
-#define NONE -1
-#define LEFT 0
-#define RIGHT 1
-#define UP 2
-#define DOWN 3
-
-#define ALIVE 0
-#define DEAD 1
-#define REVIVED 2
-
-#define FACELEFT 0
-#define FACERIGHT 1
-#define FACEUP 2
-#define FACEDOWN 3
-#define SCATTER 4
-#define BLINK 5
-
 static const float WinLength = WinX, WinHeight = WinY;
 
 void ResizeView(const RenderWindow &window, View& view); // ASPECT RATIO FUNCTION

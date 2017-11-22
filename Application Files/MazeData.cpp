@@ -9,16 +9,20 @@
 #include <sstream>
 
 void MazeData::loadPellets(int arraySize) {
-    powerPelletTexture.loadFromFile(resourcePath() + "/Graphics/maze-ppellet.png");
-
 	if (arraySize == 4) {
+        powerPellet = new Player[arraySize];
 		for (int i = 0; i < arraySize; i++) {
-			powerPellet[i].create(powerPelletTexture, Vector2f(powerPelletSize, powerPelletSize), Vector2f(0.0f, 0.0f));
+            powerPellet[i].initialize("maze-ppellet.png", 8, 1, 2);
+            powerPellet[i].setFrameTime(seconds(0.5));
+            powerPellet[i].setOrigin(4, 4);
+            powerPellet[i].setScale(3, 3);
 		}
 	}
 	else if (arraySize == 240) {
+        pellet = new Player[arraySize];
 		for (int i = 0; i < arraySize; i++) {
-			pellet[i].create("pellet", Vector2f(pelletSize, pelletSize), Vector2f(0.0f, 0.0f));
+            pellet[i].initialize("maze-pellet.png", 8, 2, 1);
+            pellet[i].setOrigin(4, 4);
 		}
 	}
 }
@@ -409,8 +413,3 @@ void MazeData::teleportPlayer(Player &player) {
     }
 }
 
-void MazeData::drawPellets(RenderWindow& window, int arraySize) {
-	for (int i = 0; i < arraySize; i++) {
-		powerPellet[i].draw(window);
-	}
-}

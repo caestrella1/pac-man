@@ -6,21 +6,21 @@
 //  Copyright © 2017 Carlos Estrada. All rights reserved.
 //
 #pragma once
-#include "Player.hpp"
+#include "Collision.hpp"
+using namespace sf;
 
 class MazeData {
-	Texture powerPelletTexture, fruitTexture;
+	Texture fruitTexture;
 
 public:
-	Platform powerPellet[4];
-	Platform pellet[240];
+    Player* powerPellet;
+    Player* pellet;
 
 	Node node[65];
 	Node ghostNode[7];
 
 	void loadPellets(int arraySize);
 	void placePellets(int arraySize);
-	void drawPellets(RenderWindow& window, int arraySize);
 
 	void placeNodes();
     void setValidNodeMovements();

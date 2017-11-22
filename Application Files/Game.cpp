@@ -9,12 +9,8 @@
 #include "Game.hpp"
 
 /***** GHOST LOGIC *****/
-bool checkGhost(Player &pacman, Player &ghost) {
-    return pacman.getCollider().checkCollision(ghost.getCollider(), 1.0) == true;
-}
-
 void ghostMultiplier(Player &pacman, Player &ghost, Vector2f &ghostPosition, Audio &eatghost, int &ghostCount, int &score) {
-    if (checkGhost(pacman, ghost)) {
+    if (checkCollision(pacman, ghost)) {
         ghostCount++;
         ghost.setPosition(ghostPosition);
         eatghost.play();
@@ -34,12 +30,31 @@ void ghostMultiplier(Player &pacman, Player &ghost, Vector2f &ghostPosition, Aud
     }
 }
 
-void deathByGhost(Player &pacman) {
-    pacman.playerstate = DEAD;
-    pacman.setFrame(0);
-    pacman.setSwitchTime(0.075);
-    pacman.direction = NONE;
-    pacman.body.setRotation(0);
+void managePlayerState(Player &pacman) {
+    if (pacman.getState() == ALIVE) {
+        pacman.setFrameTime(seconds(0.02));
+        pacman.setLooped(true);
+    }
+    else if (pacman.getState() == DEAD) {
+        pacman.setFrameTime(seconds(0.075));
+        pacman.setLooped(false);
+        pacman.setFrame(0);
+        pacman.direction = NONE;
+        pacman.setRotation(0);
+    }
+    if (pacman.getState() == REVIVED) {
+        pacman.setLooped(false);
+    }
+}
+
+bool checkCollision(Player& object1, Player& object2) {
+    return Collision::BoundingBoxTest(object1, object2);
+}
+
+void findNode(Player& player, Node& node) {
+    if ((Vector2i)node.getPosition() == (Vector2i)player.getPosition()) {
+        player.setDirectionAtNode(node);
+    }
 }
 
 /***** SCORE AND LEVELS *****/
@@ -62,10 +77,10 @@ void oneUp(int &score, int &lifeScore, int &lifeCount, Audio &life) {
 void levelUp(int &pelletCount, int &level, float &looppitch, Audio &siren, Player &fruit, bool &isEaten) {
     level++;
     if (level < 7) {
-        fruit.playerstate = level - 1;
+        fruit.switchState(level - 1);
     }
     else {
-        fruit.playerstate = 5;
+        fruit.switchState(5);
     }
     fruit.setPosition(Vector2f(512, 576));
     isEaten = false;
@@ -75,17 +90,15 @@ void levelUp(int &pelletCount, int &level, float &looppitch, Audio &siren, Playe
 }
 
 void setDifficulty(Player &blinky, Player &inky, Player &pinky, Player &clyde, float &edibleLimit) {
-    float pacmanSpeed = 200, ghostSpeed = 120;
     if (edibleLimit > 0.0) {
         edibleLimit -= 1.0;
     }
-    if (ghostSpeed < 160) {
-        ghostSpeed += 5;
+    if (blinky.getPlayerSpeed() < 160) {
+        blinky.setPlayerSpeed(blinky.getPlayerSpeed() + 5);
+        inky.setPlayerSpeed(inky.getPlayerSpeed() + 5);
+        pinky.setPlayerSpeed(pinky.getPlayerSpeed() + 5);
+        clyde.setPlayerSpeed(clyde.getPlayerSpeed() + 5);
     }
-    blinky.setSpeed(ghostSpeed);
-    inky.setSpeed(ghostSpeed);
-    pinky.setSpeed(ghostSpeed);
-    clyde.setSpeed(ghostSpeed);
 }
 
 /***** SOUNDS *****/
@@ -107,9 +120,9 @@ void soundSwitcher(bool &isEdible, int &gamestate, Audio &siren, Audio &scatter)
 }
 
 /***** RESETS *****/
-void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit, std::ostringstream &ss, Text &scoreValue, Clock &startClock, float &deltaTime) {
+void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit, std::ostringstream &ss, Text &scoreValue, Clock &startClock) {
     level = 1;
-    fruit.playerstate = 0;
+    fruit.switchState(0);
     lifeCount = 4;
     pelletCount = 0;
     score = 0;
@@ -117,37 +130,26 @@ void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, in
     looppitch = 1.0;
     updatePoints(ss, score, scoreValue);
     startClock.restart().asSeconds();
-    deltaTime = 0;
 }
 
 void resetPlayersOnDeath(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde) {
-    Vector2f pacmanPos(512, 746);
-    Vector2f blinkyPos(512, 405);
-    Vector2f pinkyPos(512, 501);
-    Vector2f inkyPos(463, 501);
-    Vector2f clydePos(562, 501);
+    Vector2f pacmanPos(512, 746), blinkyPos(512, 405), inkyPos(463, 501), pinkyPos(512, 501), clydePos(562, 501);
     
     pacman.setPosition(pacmanPos);
     pacman.direction = NONE;
     pacman.queueDirection = NONE;
-    pacman.body.setRotation(0);
+    pacman.setRotation(0);
     pacman.setFrame(0);
     
-    blinky.setPosition(blinkyPos);                // TOP
-    inky.setPosition(inkyPos);                    // LEFT (GHOST PEN)
-    pinky.setPosition(pinkyPos);                // MIDDLE (GHOST PEN)
-    clyde.setPosition(clydePos);                // RIGHT (GHOST PEN)
-    blinky.playerstate = FACERIGHT;
-    inky.playerstate = FACEUP;
-    pinky.playerstate = FACEDOWN;
-    clyde.playerstate = FACEUP;
+    blinky.setPosition(blinkyPos); inky.setPosition(inkyPos); pinky.setPosition(pinkyPos); clyde.setPosition(clydePos);
+    blinky.switchState(FACERIGHT); inky.switchState(FACEUP); pinky.switchState(FACEDOWN); clyde.switchState(FACEUP);
 }
 
 void resetOnGameOver(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde, MazeData &maze, float &edibleTime) {
     resetPlayersOnDeath(pacman, blinky, inky, pinky, clyde);
+    edibleTime = 10;
     maze.placePellets(240);
     maze.placePellets(4);
-    edibleTime = 10;
 }
 
 

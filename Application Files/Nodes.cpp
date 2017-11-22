@@ -9,7 +9,6 @@
 #include "Nodes.hpp"
 
 Node::Node() {
-    mazenode.setFillColor(Color(0, 0, 0, 0));
     mazenode.setSize(Vector2f(pelletSize, pelletSize));
     mazenode.setPosition(Vector2f(0.0f, 0.0f));
     mazenode.setOrigin(Vector2f(pelletSize / 2, pelletSize / 2));
@@ -29,4 +28,8 @@ void Node::setValidDirections(bool up, bool down, bool left, bool right) {
     isDownValid = down;
     isLeftValid = left;
     isRightValid = right;
+}
+
+void Node::draw(RenderWindow& window) {
+    window.draw(mazenode);
 }

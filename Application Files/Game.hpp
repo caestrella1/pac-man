@@ -11,7 +11,6 @@
 #include "MazeData.hpp"
 #include <sstream>
 #include <iostream>
-#endif /* Game_hpp */
 
 #define STARTING    0    // WHEN GAME IS AT "READY" STATE
 #define PLAYING     1    // WHEN PLAYER IS MOVING / UNPAUSED
@@ -21,9 +20,11 @@
 #define LOSER       5    // WHEN LIVES REACH ZERO
 
 // GHOST LOGIC
-bool checkGhost(Player &pacman, Player &ghost);
 void ghostMultiplier(Player &pacman, Player &ghost, Vector2f &ghostPosition, Audio &eatghost, int &ghostCount, int &score);
-void deathByGhost(Player &pacman);
+void managePlayerState(Player &pacman);
+
+bool checkCollision(Player& object1, Player& object2);
+void findNode(Player& player, Node& node);
 
 // SCORE AND LEVELS
 void updatePoints(std::ostringstream &ss, int &score, Text &scoreValue);
@@ -35,10 +36,8 @@ void setDifficulty(Player &blinky, Player &inky, Player &pinky, Player &clyde, f
 void soundSwitcher(bool &isEdible, int &gamestate, Audio &siren, Audio &scatter);
 
 // RESETS
-void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit, std::ostringstream &ss, Text &scoreValue, Clock &startClock, float &deltaTime);
+void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit, std::ostringstream &ss, Text &scoreValue, Clock &startClock);
 void resetPlayersOnDeath(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde);
 void resetOnGameOver(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde, MazeData &maze, float &edibleTime);
 
-
-
-
+#endif /* Game_hpp */
