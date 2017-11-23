@@ -11,39 +11,39 @@
 int main() {
     /*** WINDOW & CLOCKS ***/
     RenderWindow window(VideoMode(WinX, WinY), "PAC-MAN 2017", Style::Default);
-
-//    window.setMouseCursorVisible(false);
+    View view(Vector2f(WinX / 2, WinY / 2), Vector2f(WinX, WinY));
     window.setKeyRepeatEnabled(false);
-
-    View view(Vector2f(0.0, 0.0), Vector2f(WinX, WinY));
-    view.setCenter(Vector2f(WinX / 2, WinY / 2));
 
     Clock deltaClock, edibleClock, fruitClock, startClock, deathClock;
     Time deltaTime, startTime, deathTime;
     float edibleTime, fruitTime;
-    // END WINDOW & CLOCKS
+    
+    /*** VARIABLES ***/
+    int ghostCount = 0, pelletCount = 0, lifeCount = 4, lifeScore = 10000;
+    int gamestate = STARTING, level = 1, score = 0;
+    float looppitch = 1.00, edibleLimit = 10.0;
+    std::ostringstream ss;
+    
+    bool isEdible, isEaten, startInit, showFruit;
+    isEdible = isEaten = startInit = showFruit = false;
 
     /*** MAZE ***/
-    RectangleShape mazeRectangle;
-    mazeRectangle.setSize(Vector2f(WinLength, WinHeight));
-
-    Texture backgroundMaze;
-    backgroundMaze.loadFromFile(resourcePath() + "/Graphics/maze-bg.png");
-    mazeRectangle.setTexture(&backgroundMaze);
+    Texture MazeBG;
+    MazeBG.loadFromFile(resourcePath() + "/Graphics/maze-bg.png");
+    RectangleShape background(Vector2f(WinLength, WinHeight));
+    background.setTexture(&MazeBG);
 
     MazeData maze;
-    maze.setValidNodeMovements();
-    maze.loadPellets(4);  maze.loadPellets(240);
-    maze.placePellets(4); maze.placePellets(240); maze.placeNodes();
-    // END MAZE
+    maze.loadPellets(4);  maze.placePellets(4);
+    maze.loadPellets(240); maze.placePellets(240);
+    maze.placeNodes(); maze.setValidNodeMovements();
 
     /*** TEXT ***/
-    std::string gameFont = "/Graphics/font.ttf";
-    addText scoreText(gameFont), scoreValue(gameFont), ready(gameFont), gameover(gameFont);
-    addText youwin(gameFont), playAgain(gameFont), continueLevel(gameFont);
+    addText playerScore, scoreText("SCORE"), ready("READY!"), gameover("GAME   OVER");
+    addText youwin("YOU WIN!"), playAgain("PRESS SPACE TO PLAY AGAIN"), continueLevel("PRESS SPACE TO CONTINUE");
 
     scoreText.setPosition(Vector2f(125, 40));
-    scoreValue.setPosition(Vector2f(250, 40));
+    playerScore.setPosition(Vector2f(250, 40));
     ready.setPosition(Vector2f(450, 550));
     gameover.setPosition(Vector2f(370, 540));
     youwin.setPosition(Vector2f(405, 540));
@@ -51,7 +51,7 @@ int main() {
     continueLevel.setPosition(Vector2f(326, 730));
 
     scoreText.setFillColor(Color(208, 62, 25));            // RED
-    scoreValue.setFillColor(Color(255, 255, 255));        // WHITE
+    playerScore.setFillColor(Color(255, 255, 255));        // WHITE
     ready.setFillColor(Color(255, 255, 0));                // YELLOW
     gameover.setFillColor(Color(208, 62, 25));            // RED
     youwin.setFillColor(Color(70, 191, 238));            // CYAN
@@ -62,27 +62,17 @@ int main() {
     gameover.setCharacterSize(53);
     youwin.setCharacterSize(53);
 
-    scoreText.setString("SCORE");
-    ready.setString("READY!");
-    gameover.setString("GAME   OVER");
-    youwin.setString("YOU WIN!");
-    playAgain.setString("PRESS SPACE TO PLAY AGAIN");
-    continueLevel.setString("PRESS SPACE TO CONTINUE");
-
-    std::ostringstream ss;
-    int score = 0;
-    ss << score;
-    scoreValue.setString(ss.str());
+    updatePoints(ss, score, playerScore);
     // END TEXT
 
     /*** PLAYERS ***/
     float pacmanSpeed = 200, ghostSpeed = 120;
     Vector2f pacmanPos(512, 746), blinkyPos(512, 405), pinkyPos(512, 501), inkyPos(463, 501), clydePos(562, 501);
     Player pacman("char-pacman.png", 16, 3, 20); pacman.setFrameTime(seconds(0.02));
-    Player blinky("char-blinky.png", 16, 6, 2); blinky.setFrameTime(seconds(10));
-    Player inky("char-inky.png", 16, 6, 2); inky.setFrameTime(seconds(1.0));
-    Player pinky("char-pinky.png", 16, 6, 2); pinky.setFrameTime(seconds(1.0));
-    Player clyde("char-clyde.png", 16, 6, 2); clyde.setFrameTime(seconds(1.0));
+    Player blinky("char-blinky.png", 16, 6, 2); blinky.setFrameTime(seconds(0.25));
+    Player inky("char-inky.png", 16, 6, 2); inky.setFrameTime(seconds(0.25));
+    Player pinky("char-pinky.png", 16, 6, 2); pinky.setFrameTime(seconds(0.25));
+    Player clyde("char-clyde.png", 16, 6, 2); clyde.setFrameTime(seconds(0.25));
     
     float scale = 2.5;
     pacman.setScale(scale, scale);
@@ -97,18 +87,13 @@ int main() {
     pinky.setPlayerSpeed(ghostSpeed);
     clyde.setPlayerSpeed(ghostSpeed);
 
-    resetPlayersOnDeath(pacman, blinky, inky, pinky, clyde);        // SET PLAYER STARTING POSITIONS
+    resetGame(pacman, blinky, inky, pinky, clyde, maze, edibleTime, gamestate);
     // END PLAYERS
 
     /*** SOUNDS ***/
-    Audio chomp1("Audio/chomp1.wav"), chomp2("Audio/chomp2.wav"), scatter("Audio/scatter.wav");
-    Audio theme("Audio/theme.wav"), siren("Audio/siren.wav"), eatfruit("Audio/eatfruit.wav");
-    Audio life("Audio/life.wav"), death("Audio/death.wav"), eatghost("Audio/eatghost.wav");
-
-
-    scatter.setLoop(true);
-    siren.setLoop(true);
-    theme.play();
+    Audio chomp1("chomp1.wav"), chomp2("chomp2.wav"), scatter("scatter.wav"), theme("theme.wav");
+    Audio siren("siren.wav"), eatfruit("eatfruit.wav"), life("life.wav"), death("death.wav"), eatghost("eatghost.wav");
+    scatter.setLoop(true); siren.setLoop(true); theme.play();
     // END SOUNDS
 
     /*** FRUIT ***/
@@ -138,14 +123,6 @@ int main() {
     fruitSprite[5].setTexture(&key);
     // END FRUIT
 
-    /*** VARIABLES ***/
-    int gamestate = STARTING, level = 1;
-    int ghostCount = 0, pelletCount = 0, lifeCount = 4, lifeScore = 10000;
-    float looppitch = 1.00, edibleLimit = 10.0;
-
-    bool isEdible, isEaten, edibleSound, startInit, sirenInit, showFruit;
-    isEdible = isEaten = edibleSound = startInit = sirenInit = showFruit = false;
-
     RectangleShape lives[7];
     Texture livesTexture;
     livesTexture.loadFromFile(resourcePath() + "/Graphics/maze-lives.png");
@@ -162,9 +139,7 @@ int main() {
     selectArrow.loadFromFile(resourcePath() + "/Graphics/menu-select.png");
 
     RectangleShape pauseOpacity, pauseMenu, select;
-    Vector2f selectPos;
-    selectPos.x = 380;
-    selectPos.y = 365;
+    Vector2f selectPos(380, 365);
 
     pauseOpacity.setSize(Vector2f(WinX, WinY));
     pauseMenu.setSize(Vector2f(600, 750));
@@ -179,8 +154,8 @@ int main() {
     pauseMenu.setTexture(&pauseBG);
     select.setTexture(&selectArrow);
 
-    addText paused(gameFont), continueText(gameFont), restartText(gameFont);
-    addText quitText(gameFont), controlText(gameFont), WASDText(gameFont), ArrowText(gameFont);
+    addText paused("PAUSED"), continueText("CONTINUE"), restartText("RESTART");
+    addText quitText("QUIT"), controlText("CONTROLS"), WASDText("WASD KEYS >"), ArrowText("< ARROW KEYS");
 
     paused.setFillColor(Color(70, 191, 238));            // CYAN
     continueText.setFillColor(Color(255, 255, 255));    // WHITE
@@ -205,14 +180,6 @@ int main() {
     controlText.setPosition(Vector2f(435, 550));
     WASDText.setPosition(Vector2f(435, 600));
     ArrowText.setPosition(Vector2f(435, 600));
-
-    paused.setString("PAUSED");
-    continueText.setString("CONTINUE");
-    restartText.setString("RESTART");
-    quitText.setString("QUIT");
-    controlText.setString("CONTROLS");
-    WASDText.setString("WASD KEYS >");
-    ArrowText.setString("< ARROW KEYS");
     // END PAUSE STATE
 
     /******************** MAIN GAME LOOP ********************/
@@ -227,27 +194,24 @@ int main() {
             }
             else if (checkEvent.type == Event::Resized) {  // RESIZE WINDOW
                 ResizeView(window, view);
-                gamestate = PAUSED;
-                soundSwitcher(isEdible, gamestate, siren, scatter);
+                if (gamestate == PLAYING) {
+                    gamestate = PAUSED;
+                    soundSwitcher(isEdible, gamestate, siren, scatter);
+                }
             }
             else if (checkEvent.type == Event::LostFocus) {  // INACTIVE WINDOW
-                ResizeView(window, view);
-                gamestate = PAUSED;
-                soundSwitcher(isEdible, gamestate, siren, scatter);
+                if (gamestate == PLAYING) {
+                    gamestate = PAUSED;
+                    soundSwitcher(isEdible, gamestate, siren, scatter);
+                }
             }
             
 
             // GAME INTERACTION
             if (gamestate == PLAYING) { // PAUSE WITH SPACEBAR
                 if (checkEvent.type == Event::KeyPressed && checkEvent.key.code == Keyboard::Space) {
-                    //std::cout << "GAME PAUSED" << std::endl;
                     gamestate = PAUSED;
                     soundSwitcher(isEdible, gamestate, siren, scatter);
-                    pacman.pause();
-                    blinky.pause();
-                    inky.pause();
-                    pinky.pause();
-                    clyde.pause();
                 }
             }
             else if (gamestate == PAUSED) { // PAUSE MENU
@@ -287,8 +251,8 @@ int main() {
                     window.close();
                 }
                 else if (selectPos.y == 415 && checkEvent.key.code == Keyboard::Return) {   // SELECT RESTART (MENU)
-                    resetOnGameOver(pacman, blinky, inky, pinky, clyde, maze, edibleTime);
-                    resetStats(lifeCount, pelletCount, score, lifeScore, level, looppitch, fruit, ss, scoreValue, startClock);
+                    resetGame(pacman, blinky, inky, pinky, clyde, maze, edibleTime, gamestate);
+                    resetStats(lifeCount, pelletCount, score, lifeScore, level, looppitch, fruit, ss, playerScore, startClock);
 
                     theme.play();
                     eatfruit.play();
@@ -296,19 +260,18 @@ int main() {
                     startInit = false;
                     gamestate = STARTING;
                 }
-                else if ((selectPos.y == 365 && checkEvent.key.code == Keyboard::Return) || (checkEvent.type == Event::KeyPressed && checkEvent.key.code == Keyboard::Space)) {   // SELECT CONTINUE
+                else if (selectPos.y == 365 && checkEvent.key.code == Keyboard::Return) {   // SELECT CONTINUE
                     gamestate = PLAYING;
                     eatfruit.play();
-                    pacman.play(); blinky.play(); inky.play(); pinky.play(); clyde.play();
                     soundSwitcher(isEdible, gamestate, siren, scatter);
                 }
             }
             else if (gamestate == WINNER || gamestate == LOSER) {   // PRESS SPACE TO RESTART
                 if (checkEvent.type == Event::KeyPressed && checkEvent.key.code == Keyboard::Space) {
-                    resetOnGameOver(pacman, blinky, inky, pinky, clyde, maze, edibleTime);
+                    resetGame(pacman, blinky, inky, pinky, clyde, maze, edibleTime, gamestate);
 
                     if (gamestate == LOSER) {
-                        resetStats(lifeCount, pelletCount, score, lifeScore, level, looppitch, fruit, ss, scoreValue, startClock);
+                        resetStats(lifeCount, pelletCount, score, lifeScore, level, looppitch, fruit, ss, playerScore, startClock);
                         theme.play();
                     }
 
@@ -327,14 +290,6 @@ int main() {
         pinky.update(deltaTime);
         clyde.update(deltaTime);
         // END CHARACTER ANIMATIONS
-
-        if (gamestate == PLAYING || gamestate == STARTING) {
-            pacman.nextDirection();        // ALLOW DIRECTION QUEUE WHEN NOT PAUSED
-            blinky.blinkyAI(deltaTime, pacman);
-            inky.inkyAI(deltaTime, pacman);
-            pinky.pinkyAI(deltaTime, pacman);
-            clyde.clydeAI(deltaTime, pacman);
-        }
 
         if (gamestate == STARTING) {
             if (!startInit) {
@@ -355,6 +310,18 @@ int main() {
                 showFruit = false;
             }
         }
+        else if (gamestate == DYING) {
+            if (startInit) {
+                startClock.restart().asSeconds();
+            }
+            deathTime = deathClock.getElapsedTime();
+            
+            if (deathTime.asSeconds() >= 1.475) {
+                lifeCount--;    // DEDUCT LIFE AFTER DEATH ANIMATION
+                lifeCount < 0 ? gamestate = LOSER : gamestate = STARTING;
+                resetGame(pacman, blinky, inky, pinky, clyde, maze, edibleTime, gamestate);
+            }
+        }
         else if (gamestate == PLAYING) {       // MAIN GAME LOOP
             if (pelletCount >= 244) {
                 gamestate = WINNER;
@@ -363,7 +330,8 @@ int main() {
                 levelUp(pelletCount, level, looppitch, siren, fruit, isEaten);
             }
             /*** CHARACTER MOVEMENT ***/
-            pacman.setDirectionOpposite();        // OPPOSITE DIRECTION CHANGE
+            pacman.nextDirection();
+            pacman.setDirectionOpposite();
             for (int i = 0; i < 65; i++) {
                 findNode(blinky, maze.node[i]);
                 findNode(inky, maze.node[i]);
@@ -377,44 +345,30 @@ int main() {
                 findNode(pinky, maze.ghostNode[i]);
                 findNode(clyde, maze.ghostNode[i]);
             }
-            // MOVE AFTER TOUCHING NODE
-            pacman.movePlayer(deltaTime);
-            blinky.moveGhost(deltaTime);
-            inky.moveGhost(deltaTime);
-            pinky.moveGhost(deltaTime);
-            clyde.moveGhost(deltaTime);
-            // END CHARACTER MOVEMENT
+            blinky.blinkyAI(deltaTime, pacman);
+            inky.inkyAI(deltaTime, pacman);
+            pinky.pinkyAI(deltaTime, pacman);
+            clyde.clydeAI(deltaTime, pacman);
 
             /*** COLLISIONS ***/
-            if (isEdible) {
+            if (blinky.isEdible) {
                 edibleTime = edibleClock.getElapsedTime().asSeconds();
-
-                if (edibleTime >= (edibleLimit / 1.5) && edibleTime < edibleLimit) {
-                    blinky.switchState(BLINK);
-                    inky.switchState(BLINK);
-                    pinky.switchState(BLINK);
-                    clyde.switchState(BLINK);
-                }
-                else {
-                    blinky.switchState(SCATTER);
-                    inky.switchState(SCATTER);
-                    pinky.switchState(SCATTER);
-                    clyde.switchState(SCATTER);
-                }
+                
+                manageGhostState(blinky, edibleTime, edibleLimit);
+                manageGhostState(inky, edibleTime, edibleLimit);
+                manageGhostState(pinky, edibleTime, edibleLimit);
+                manageGhostState(clyde, edibleTime, edibleLimit);
 
                 // EDIBLE GHOST SCORES
-                ghostMultiplier(pacman, blinky, blinkyPos, eatghost, ghostCount, score);
-                ghostMultiplier(pacman, inky, inkyPos, eatghost, ghostCount, score);
-                ghostMultiplier(pacman, pinky, pinkyPos, eatghost, ghostCount, score);
-                ghostMultiplier(pacman, clyde, clydePos, eatghost, ghostCount, score);
-                updatePoints(ss, score, scoreValue);
+                ghostMultiplier(pacman, blinky, eatghost, ghostCount, score);
+                ghostMultiplier(pacman, inky, eatghost, ghostCount, score);
+                ghostMultiplier(pacman, pinky, eatghost, ghostCount, score);
+                ghostMultiplier(pacman, clyde, eatghost, ghostCount, score);
+                updatePoints(ss, score, playerScore);
 
                 if (edibleTime >= edibleLimit) {
                     isEdible = false;
-                    blinky.switchState(blinky.direction);
-                    inky.switchState(inky.direction);
-                    pinky.switchState(pinky.direction);
-                    clyde.switchState(clyde.direction);
+                    blinky.isEdible = inky.isEdible = pinky.isEdible = clyde.isEdible = false;
                     soundSwitcher(isEdible, gamestate, siren, scatter);
                     ghostCount = 0;
                 }
@@ -434,15 +388,10 @@ int main() {
             for (int i = 0; i < 240; i++) {   // SMALL PELLETS
                 if (checkCollision(pacman, maze.pellet[i])) {
                     score = score + 10;
-                    updatePoints(ss, score, scoreValue);
+                    updatePoints(ss, score, playerScore);
                     oneUp(score, lifeScore, lifeCount, life);
 
-                    if (pelletCount % 2 == 0) {
-                        chomp1.play();
-                    }
-                    else {
-                        chomp2.play();
-                    }
+                    pelletCount % 2 == 0 ? chomp1.play() : chomp2.play();
 
                     pelletCount++;
                     if (pelletCount % 50 == 0 && pelletCount != 0) {
@@ -455,21 +404,17 @@ int main() {
             for (int i = 0; i < 4; i++) {        // POWER PELLETS
                 if (checkCollision(pacman, maze.powerPellet[i])) {
                     score = score + 50;
-                    updatePoints(ss, score, scoreValue);
+                    updatePoints(ss, score, playerScore);
                     oneUp(score, lifeScore, lifeCount, life);
-
-                    if (pelletCount % 2 == 0) {
-                        chomp1.play();
-                    }
-                    else {
-                        chomp2.play();
-                    }
-
                     pelletCount++;
+                    
+                    blinky.isEdible = inky.isEdible = pinky.isEdible = clyde.isEdible = true;
                     isEdible = true;
                     edibleClock.restart();
-
+                    
+                    pelletCount % 2 == 0 ? chomp1.play() : chomp2.play();
                     soundSwitcher(isEdible, gamestate, siren, scatter);
+                    
                     if (pelletCount % 50 == 0 && pelletCount != 0) {
                         looppitch += 0.025;        // INCREASE PITCH EVERY 50 PELLETS
                         siren.setPitch(looppitch);
@@ -489,21 +434,23 @@ int main() {
                 fruitTime = fruitClock.getElapsedTime().asSeconds();
                 if (fruitTime >= 0.0 && fruitTime <= 10.0) {
                     if (checkCollision(pacman, fruit)) {
-                        if (level == 1)
-                            score = score + 100;
-                        else if (level == 2)
-                            score = score + 300;
-                        else if (level == 3)
-                            score = score + 500;
-                        else if (level == 4)
-                            score = score + 700;
-                        else if (level == 5)
-                            score = score + 1000;
-                        else if (level >= 6)
-                            score = score + 2000;
+                        switch (level) {
+                            case 1: score = score + 100;
+                                break;
+                            case 2: score = score + 300;
+                                break;
+                            case 3: score = score + 500;
+                                break;
+                            case 4: score = score + 700;
+                                break;
+                            case 5: score = score + 1000;
+                                break;
+                            default: score = score + 2000;
+                                break;
+                        }
 
                         fruit.setPosition(pinkyPos);
-                        updatePoints(ss, score, scoreValue);
+                        updatePoints(ss, score, playerScore);
                         eatfruit.play();
                         isEaten = true;
                     }
@@ -521,34 +468,21 @@ int main() {
             maze.teleportPlayer(clyde);
             
         }    // MAIN GAME LOOP END
-        else if (gamestate == DYING) {
-            if (startInit) {
-                startClock.restart().asSeconds();
-            }
-            deathTime = deathClock.getElapsedTime();
-            
-            if (deathTime.asSeconds() >= 1.475) {
-                lifeCount--;    // DEDUCT LIFE AFTER DEATH ANIMATION
-                resetPlayersOnDeath(pacman, blinky, inky, pinky, clyde);
+        
+        // MOVE AFTER TOUCHING NODE
+        pacman.movePlayer(deltaTime, gamestate);
+        blinky.moveGhost(deltaTime, gamestate);
+        inky.moveGhost(deltaTime, gamestate);
+        pinky.moveGhost(deltaTime, gamestate);
+        clyde.moveGhost(deltaTime, gamestate);
+        // END CHARACTER MOVEMENT
 
-                if (lifeCount < 0) {
-                    gamestate = LOSER;
-                }
-                else {
-                gamestate = STARTING;
-                }
-            }
-        }
-        else if (gamestate == WINNER) {
-            pacman.pause();
-        }
-
-        window.clear();
         window.setView(view);
+        window.clear();
 
         /*** DRAWING ***/
         // ALWAYS DRAWING
-        window.draw(mazeRectangle);        // MAZE BACKGROUND
+        window.draw(background);        // MAZE BACKGROUND
         for (int i = 0; i < 240; i++) {   // SMALL PELLETS
             if (maze.pellet[i].getPosition().y <= WinY) {
                 window.draw(maze.pellet[i]);
@@ -562,22 +496,16 @@ int main() {
             }
         }
 
-        window.draw(scoreValue);
+        window.draw(playerScore);
         window.draw(scoreText);
 
         for (int i = 0; i < lifeCount; i++) {
             window.draw(lives[i]);
         }
 
-        if (level < 7) {
-            for (int ii = 0; ii < level; ii++) {
-                window.draw(fruitSprite[ii]);
-            }
-        }
-        else {
-            for (int ii = 0; ii < 6; ii++) {
-                window.draw(fruitSprite[ii]);
-            }
+        int fruitlimit = level < 7 ? level : 6;
+        for (int i = 0; i < fruitlimit; i++) {
+            window.draw(fruitSprite[i]);
         }
 
         // CONDITIONAL DRAWING

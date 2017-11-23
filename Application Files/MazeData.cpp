@@ -16,6 +16,7 @@ void MazeData::loadPellets(int arraySize) {
             powerPellet[i].setFrameTime(seconds(0.5));
             powerPellet[i].setOrigin(4, 4);
             powerPellet[i].setScale(3, 3);
+            powerPellet[i].play();
 		}
 	}
 	else if (arraySize == 240) {
@@ -23,6 +24,7 @@ void MazeData::loadPellets(int arraySize) {
 		for (int i = 0; i < arraySize; i++) {
             pellet[i].initialize("maze-pellet.png", 8, 2, 1);
             pellet[i].setOrigin(4, 4);
+            pellet[i].play();
 		}
 	}
 }
@@ -212,8 +214,8 @@ void MazeData::placeNodes() {
     ghostNode[1].setPosition(Vector2f(463, 475));
 	ghostNode[2].setPosition(Vector2f(512, 475));
 	ghostNode[3].setPosition(Vector2f(562, 475));
-	ghostNode[4].setPosition(Vector2f(512, 501));
-	ghostNode[5].setPosition(Vector2f(463, 501));
+	ghostNode[4].setPosition(Vector2f(463, 501));
+	ghostNode[5].setPosition(Vector2f(512, 501));
 	ghostNode[6].setPosition(Vector2f(562, 501));
 
 	// ROW 1
@@ -308,10 +310,13 @@ void MazeData::placeNodes() {
 }
 
 void MazeData::setValidNodeMovements() {
-    ghostNode[0].setValidDirections(false, true, true, true);
-    ghostNode[1].setValidDirections(false, true, false, true);
-    ghostNode[2].setValidDirections(true, true, true, true);
+    // Parameters: up, down, left, right
+    ghostNode[0].setValidDirections(false, false, true, true);
+    
+    ghostNode[1].setValidDirections(false, false, false, true);
+    ghostNode[2].setValidDirections(true, false, true, true);
     ghostNode[3].setValidDirections(false, true, true, false);
+    
     ghostNode[4].setValidDirections(true, false, false, true);
     ghostNode[5].setValidDirections(true, false, true, true);
     ghostNode[6].setValidDirections(true, false, true, false);

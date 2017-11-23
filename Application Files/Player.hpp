@@ -9,22 +9,33 @@
 #include "Nodes.hpp"
 using namespace sf;
 
-#define NONE -1
-#define LEFT 0
-#define RIGHT 1
-#define UP 2
-#define DOWN 3
+/* Directions */
+#define NONE       -1
+#define LEFT        0
+#define RIGHT       1
+#define UP          2
+#define DOWN        3
 
-#define ALIVE 0
-#define DEAD 1
-#define REVIVED 2
+/* PAC-MAN States */
+#define ALIVE       0
+#define DEAD        1
+#define REVIVED     2
 
-#define FACELEFT 0
-#define FACERIGHT 1
-#define FACEUP 2
-#define FACEDOWN 3
-#define SCATTER 4
-#define BLINK 5
+/* Ghost States */
+#define FACELEFT    0
+#define FACERIGHT   1
+#define FACEUP      2
+#define FACEDOWN    3
+#define SCATTER     4
+#define BLINK       5
+
+/* Game States */
+#define STARTING    0    // WHEN GAME IS AT "READY" SCREEN
+#define PLAYING     1    // WHEN PLAYER IS UNPAUSED
+#define DYING       2    // WHEN PACMAN IS DYING
+#define PAUSED      3    // WHEN GAME IS PAUSED
+#define WINNER      4    // WHEN PLAYER COLLECTS ALL PELLETS
+#define LOSER       5    // WHEN LIVES DROP TO ZERO
 
 class Player : public AnimatedSprite {
     Animation* state;
@@ -34,7 +45,7 @@ class Player : public AnimatedSprite {
     
 public:
     int direction = NONE, queueDirection = NONE, tryDirection = NONE;
-    bool WASDkeys = true;
+    bool WASDkeys = true, isEdible = false;
     Vector2f movement;
     float speed_;
     
@@ -53,8 +64,8 @@ public:
     void nextDirection();
     void setDirectionAtNode(Node node);
     void setDirectionOpposite();
-    void movePlayer(Time deltaTime);
-    void moveGhost(Time deltaTime);
+    void movePlayer(Time deltaTime, int gstate);
+    void moveGhost(Time deltaTime, int gstate);
 
     void blinkyAI(Time deltaTime, Player pacman);
     void inkyAI(Time deltaTime, Player pacman);
@@ -63,5 +74,7 @@ public:
 
 private:
     bool isCurrentDirectionValid(Node node, int choosedirection);
+    int findOpposite(int dir);
 };
+
 

@@ -28,11 +28,12 @@ void ResizeView(const RenderWindow &window, View& view); // ASPECT RATIO FUNCTIO
 class Audio : public Sound {
     SoundBuffer buffer;
 public:
-    Audio(std::string path);
+    Audio(std::string filename);
 };
 
 class addText : public Text {
     Font gameFont;
 public:
-    addText(std::string path);
+    addText();
+    addText(std::string str);
 };

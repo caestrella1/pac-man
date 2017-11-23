@@ -7,10 +7,9 @@
 //
 #include "Player.hpp"
 #include <time.h>
-#include <iostream>
 
 Player::Player(float speed) {
-    pause();
+    play();
 }
 
 Player::Player(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
@@ -28,8 +27,7 @@ Player::Player(std::string spritesheet, size_t spritesize, size_t numberofStates
             state[i].addFrame(IntRect(j * spritesize, i * spritesize, spritesize, spritesize));
         }
     }
-    setAnimation(state[0]);
-    pause();
+    play(state[0]);
 }
 
 void Player::initialize(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
@@ -44,8 +42,7 @@ void Player::initialize(std::string spritesheet, size_t spritesize, size_t numbe
             state[i].addFrame(IntRect(j * spritesize, i * spritesize, spritesize, spritesize));
         }
     }
-    setAnimation(state[0]);
-    play();
+    play(state[0]);
 }
 
 void Player::switchState(size_t playerstate) {
@@ -65,17 +62,17 @@ IntRect Player::getTextureRect() {
     return TextureRect;
 }
 
-bool Player::isCurrentDirectionValid(Node node, int choosedirection) {
-    if (choosedirection == UP && node.isUpValid) {
+bool Player::isCurrentDirectionValid(Node node, int dir) {
+    if (dir == UP && node.isUpValid) {
         return true;
     }
-    else if (choosedirection == DOWN && node.isDownValid) {
+    else if (dir == DOWN && node.isDownValid) {
         return true;
     }
-    else if (choosedirection == LEFT && node.isLeftValid) {
+    else if (dir == LEFT && node.isLeftValid) {
         return true;
     }
-    else if (choosedirection == RIGHT && node.isRightValid) {
+    else if (dir == RIGHT && node.isRightValid) {
         return true;
     }
     return false;
@@ -178,9 +175,17 @@ void Player::setDirectionOpposite() {
     }
 }
 
-void Player::movePlayer(Time deltaTime) {
-    movement.x = 0.0;
-    movement.y = 0.0;
+void Player::movePlayer(Time deltaTime, int gstate) {
+    if (gstate != PLAYING) {
+        if (getState() == DEAD) {
+            play();
+            return;
+        }
+        pause();
+        return;
+    }
+    
+    movement.x = 0.0; movement.y = 0.0;
 
     if (direction == RIGHT) {
         setRotation(0);
@@ -200,30 +205,57 @@ void Player::movePlayer(Time deltaTime) {
     }
 
     move(movement);
+    (movement.x > 0.0 || movement.x < 0.0 || movement.y > 0.0 || movement.y < 0.0) ? play() : pause();
 }
 
-void Player::moveGhost(Time deltaTime) {
-    movement.x = 0.0;
-    movement.y = 0.0;
-
-    if (direction == RIGHT) {
-        movement.x = speed_ * deltaTime.asSeconds();
-        switchState(FACERIGHT);
+void Player::moveGhost(Time deltaTime, int gstate) {
+    if (gstate != PLAYING) {
+        pause();
+        return;
     }
-    else if (direction == LEFT) {
-        movement.x = -speed_ * deltaTime.asSeconds();
-        switchState(FACELEFT);
+    
+    movement.x = 0.0; movement.y = 0.0;
+    
+    switch (direction) {
+        case RIGHT: movement.x = speed_ * deltaTime.asSeconds();
+            break;
+        case LEFT: movement.x = -speed_ * deltaTime.asSeconds();
+            break;
+        case UP: movement.y = -speed_ * deltaTime.asSeconds();
+            break;
+        case DOWN: movement.y = speed_ * deltaTime.asSeconds();
+            break;
     }
-    else if (direction == UP) {
-        movement.y = -speed_ * deltaTime.asSeconds();
-        switchState(FACEUP);
-    }
-    else if (direction == DOWN) {
-        movement.y = speed_ * deltaTime.asSeconds();
-        switchState(FACEDOWN);
+    if (!isEdible) {
+        switch (direction) {
+            case RIGHT: switchState(FACERIGHT);
+                break;
+            case LEFT: switchState(FACELEFT);
+                break;
+            case UP: switchState(FACEUP);
+                break;
+            case DOWN: switchState(FACEDOWN);
+                break;
+        }
     }
 
     move(movement);
+    (movement.x > 0.0 || movement.x < 0.0 || movement.y > 0.0 || movement.y < 0.0) ? play() : pause();
+}
+
+int Player::findOpposite(int dir) {
+    if (dir == RIGHT) {
+        return LEFT;
+    }
+    else if (dir == LEFT) {
+        return RIGHT;
+    }
+    else if (dir == UP) {
+        return DOWN;
+    }
+    else if (dir == DOWN) {
+        return UP;
+    }
 }
 
 void Player::blinkyAI(Time deltaTime, Player pacman) {
@@ -231,7 +263,15 @@ void Player::blinkyAI(Time deltaTime, Player pacman) {
         Follows directly behind PAC-MAN
         Always first out of ghost pen
     */
-    queueDirection = rand() % 4;
+    
+    int directions[3], index = 0;
+    for (int i = 0; i < 4; i++) {
+        if (i != findOpposite(direction)) {
+            directions[index] = i;
+            index++;
+        }
+    }
+    queueDirection = directions[rand() % 3];
 }
 
 void Player::inkyAI(Time deltaTime, Player pacman) {
@@ -239,7 +279,14 @@ void Player::inkyAI(Time deltaTime, Player pacman) {
         Uses PAC-MAN's position/direction and Blinky's position
         Exits ghost pen after PAC-MAN eats 30 pellets
     */
-    queueDirection = rand() % 4;
+    int directions[3], index = 0;
+    for (int i = 0; i < 4; i++) {
+        if (i != findOpposite(direction)) {
+            directions[index] = i;
+            index++;
+        }
+    }
+    queueDirection = directions[rand() % 3];
 }
 
 void Player::pinkyAI(Time deltaTime, Player pacman) {
@@ -247,7 +294,14 @@ void Player::pinkyAI(Time deltaTime, Player pacman) {
         Ambushes PAC-MAN by positioning himself in his way
         Second out of pen, right on game start
     */
-    queueDirection = rand() % 4;
+    int directions[3], index = 0;
+    for (int i = 0; i < 4; i++) {
+        if (i != findOpposite(direction)) {
+            directions[index] = i;
+            index++;
+        }
+    }
+    queueDirection = directions[rand() % 3];
 }
 
 void Player::clydeAI(Time deltaTime, Player pacman) {
@@ -255,6 +309,13 @@ void Player::clydeAI(Time deltaTime, Player pacman) {
         Follows directly behind PAC-MAN like Blinky but scatters once he's too close
         Exits pen after 1/3 of pellets are eaten
     */
-    queueDirection = rand() % 4;
+    int directions[3], index = 0;
+    for (int i = 0; i < 4; i++) {
+        if (i != findOpposite(direction)) {
+            directions[index] = i;
+            index++;
+        }
+    }
+    queueDirection = directions[rand() % 3];
 }
 

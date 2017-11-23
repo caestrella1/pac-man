@@ -9,10 +9,11 @@
 #include "Game.hpp"
 
 /***** GHOST LOGIC *****/
-void ghostMultiplier(Player &pacman, Player &ghost, Vector2f &ghostPosition, Audio &eatghost, int &ghostCount, int &score) {
+void ghostMultiplier(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score) {
+    Vector2f position(512, 501);
     if (checkCollision(pacman, ghost)) {
         ghostCount++;
-        ghost.setPosition(ghostPosition);
+        ghost.setPosition(position);
         eatghost.play();
 
         if (ghostCount == 4) {
@@ -32,7 +33,7 @@ void ghostMultiplier(Player &pacman, Player &ghost, Vector2f &ghostPosition, Aud
 
 void managePlayerState(Player &pacman) {
     if (pacman.getState() == ALIVE) {
-        pacman.setFrameTime(seconds(0.02));
+        pacman.setFrameTime(seconds(0.01));
         pacman.setLooped(true);
     }
     else if (pacman.getState() == DEAD) {
@@ -47,6 +48,12 @@ void managePlayerState(Player &pacman) {
     }
 }
 
+void manageGhostState(Player &ghost, float edibleTime, float edibleLimit) {
+    if (ghost.isEdible) {
+        (edibleTime >= (edibleLimit / 1.5) && edibleTime < edibleLimit) ? ghost.switchState(BLINK) : ghost.switchState(SCATTER);
+    }
+}
+
 bool checkCollision(Player& object1, Player& object2) {
     return Collision::BoundingBoxTest(object1, object2);
 }
@@ -58,10 +65,10 @@ void findNode(Player& player, Node& node) {
 }
 
 /***** SCORE AND LEVELS *****/
-void updatePoints(std::ostringstream &ss, int &score, Text &scoreValue) {
+void updatePoints(std::ostringstream &ss, int &score, Text &playerScore) {
     ss.str("");
     ss << score;
-    scoreValue.setString(ss.str());
+    playerScore.setString(ss.str());
 }
 
 void oneUp(int &score, int &lifeScore, int &lifeCount, Audio &life) {
@@ -120,7 +127,8 @@ void soundSwitcher(bool &isEdible, int &gamestate, Audio &siren, Audio &scatter)
 }
 
 /***** RESETS *****/
-void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit, std::ostringstream &ss, Text &scoreValue, Clock &startClock) {
+void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit, std::ostringstream &ss, Text &playerScore,
+        Clock &startClock) {
     level = 1;
     fruit.switchState(0);
     lifeCount = 4;
@@ -128,11 +136,11 @@ void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, in
     score = 0;
     lifeScore = 10000;
     looppitch = 1.0;
-    updatePoints(ss, score, scoreValue);
+    updatePoints(ss, score, playerScore);
     startClock.restart().asSeconds();
 }
 
-void resetPlayersOnDeath(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde) {
+void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde, MazeData &maze, float &edibleTime, int &gamestate) {
     Vector2f pacmanPos(512, 746), blinkyPos(512, 405), inkyPos(463, 501), pinkyPos(512, 501), clydePos(562, 501);
     
     pacman.setPosition(pacmanPos);
@@ -143,13 +151,18 @@ void resetPlayersOnDeath(Player &pacman, Player &blinky, Player &inky, Player &p
     
     blinky.setPosition(blinkyPos); inky.setPosition(inkyPos); pinky.setPosition(pinkyPos); clyde.setPosition(clydePos);
     blinky.switchState(FACERIGHT); inky.switchState(FACEUP); pinky.switchState(FACEDOWN); clyde.switchState(FACEUP);
-}
-
-void resetOnGameOver(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde, MazeData &maze, float &edibleTime) {
-    resetPlayersOnDeath(pacman, blinky, inky, pinky, clyde);
-    edibleTime = 10;
-    maze.placePellets(240);
-    maze.placePellets(4);
+    blinky.queueDirection = inky.queueDirection = pinky.queueDirection = clyde.queueDirection = NONE;
+    blinky.direction = inky.direction = pinky.direction = clyde.direction = NONE;
+    
+    if (gamestate == LOSER) {
+        edibleTime = 10;
+    }
+    else {
+        if (gamestate != STARTING) {
+            maze.placePellets(240);
+            maze.placePellets(4);
+        }
+    }
 }
 
 
