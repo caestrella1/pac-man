@@ -5,9 +5,9 @@ Guide PAC-MAN through this classic maze as you consume pellets, chase ghosts, an
 Built using Simple and Fast Multimedia Library (SFML) and modeled after the original PAC-MAN arcade game, this version features a combination of modified graphics, custom animations, a unique pause menu, and original gameplay.
 
 ## Credits
-- Animation and AnimatedSprite classes created by Maximilian Wagenbach ([Foaly](https://github.com/Foaly)).
-- Collision detection by Nick Koirala (original version) and [ahnonay](https://github.com/ahnonay) (SFML2 compatibility).
+- [AnimatedSprite](https://github.com/SFML/SFML/wiki/Source:-AnimatedSprite) by Maximilian Wagenbach.
+- [Simple Collision Detection](https://github.com/SFML/SFML/wiki/Source%3A-Simple-Collision-Detection) by Nick Koirala and ahnonay.
 
 ### Known Issues
-- Characters sometimes wander off the grid (especially the ghosts)
-- Ghosts move randomly (Algorithm will eventually be implemented).
+- Characters sometimes wander off the grid.
+- Ghosts move semi-randomly (Algorithm will eventually be implemented).
