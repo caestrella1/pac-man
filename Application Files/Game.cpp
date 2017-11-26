@@ -9,25 +9,33 @@
 #include "Game.hpp"
 
 /***** GHOST LOGIC *****/
-void ghostMultiplier(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score) {
+void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score, int &gamestate, Audio &death, bool &edible, Clock &deathClock) {
     Vector2f position(512, 501);
-    if (checkCollision(pacman, ghost)) {
+    if (checkCollision(pacman, ghost) && ghost.isEdible) {
         ghostCount++;
         ghost.setPosition(position);
+        ghost.isEdible = false;
         eatghost.play();
-
-        if (ghostCount == 4) {
-            score = score + 1600;
+        
+        switch(ghostCount) {
+            case 1: score += 200;
+                break;
+            case 2: score += 400;
+                break;
+            case 3: score += 800;
+                break;
+            case 4: score += 1600;
+                break;
         }
-        else if (ghostCount == 3) {
-            score = score + 800;
-        }
-        else if (ghostCount == 2) {
-            score = score + 400;
-        }
-        else if (ghostCount == 1) {
-            score = score + 200;
-        }
+    }
+    else if (checkCollision(pacman, ghost) && !ghost.isEdible) {
+        gamestate = DYING;
+        pacman.switchState(DEAD);
+        managePlayerState(pacman);
+        death.play();
+        edible = false;
+        death.play();
+        deathClock.restart().asSeconds();
     }
 }
 
@@ -43,14 +51,8 @@ void managePlayerState(Player &pacman) {
         pacman.direction = NONE;
         pacman.setRotation(0);
     }
-    if (pacman.getState() == REVIVED) {
+    else if (pacman.getState() == REVIVED) {
         pacman.setLooped(false);
-    }
-}
-
-void manageGhostState(Player &ghost, float edibleTime, float edibleLimit) {
-    if (ghost.isEdible) {
-        (edibleTime >= (edibleLimit / 1.5) && edibleTime < edibleLimit) ? ghost.switchState(BLINK) : ghost.switchState(SCATTER);
     }
 }
 
@@ -113,11 +115,15 @@ void soundSwitcher(bool &isEdible, int &gamestate, Audio &siren, Audio &scatter)
     if (gamestate == PLAYING) {
         if (isEdible) {
             siren.stop();
-            scatter.play();
+            if (Audio::Paused == scatter.getStatus() || Audio::Stopped == scatter.getStatus()) {
+                scatter.play();
+            }
         }
         else {
             scatter.stop();
-            siren.play();
+            if (Audio::Paused == siren.getStatus() || Audio::Stopped == siren.getStatus()) {
+                siren.play();
+            }
         }
     }
     else {
@@ -153,6 +159,7 @@ void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Play
     blinky.switchState(FACERIGHT); inky.switchState(FACEUP); pinky.switchState(FACEDOWN); clyde.switchState(FACEUP);
     blinky.queueDirection = inky.queueDirection = pinky.queueDirection = clyde.queueDirection = NONE;
     blinky.direction = inky.direction = pinky.direction = clyde.direction = NONE;
+    blinky.isEdible = inky.isEdible = pinky.isEdible = clyde.isEdible = false;
     
     if (gamestate == LOSER) {
         edibleTime = 10;

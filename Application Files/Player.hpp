@@ -65,7 +65,7 @@ public:
     void setDirectionAtNode(Node node);
     void setDirectionOpposite();
     void movePlayer(Time deltaTime, int gstate);
-    void moveGhost(Time deltaTime, int gstate);
+    void moveGhost(Time deltaTime, int gstate, float edibleTime, float edibleLimit);
 
     void blinkyAI(Time deltaTime, Player pacman);
     void inkyAI(Time deltaTime, Player pacman);

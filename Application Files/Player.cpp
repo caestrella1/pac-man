@@ -208,7 +208,7 @@ void Player::movePlayer(Time deltaTime, int gstate) {
     (movement.x > 0.0 || movement.x < 0.0 || movement.y > 0.0 || movement.y < 0.0) ? play() : pause();
 }
 
-void Player::moveGhost(Time deltaTime, int gstate) {
+void Player::moveGhost(Time deltaTime, int gstate, float edibleTime, float edibleLimit) {
     if (gstate != PLAYING) {
         pause();
         return;
@@ -226,7 +226,10 @@ void Player::moveGhost(Time deltaTime, int gstate) {
         case DOWN: movement.y = speed_ * deltaTime.asSeconds();
             break;
     }
-    if (!isEdible) {
+    if (isEdible) {
+        (edibleTime >= (edibleLimit / 1.5) && edibleTime < edibleLimit) ? switchState(BLINK) : switchState(SCATTER);
+    }
+    else {
         switch (direction) {
             case RIGHT: switchState(FACERIGHT);
                 break;

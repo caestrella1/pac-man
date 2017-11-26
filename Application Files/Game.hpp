@@ -13,9 +13,8 @@
 #include <iostream>
 
 // GHOST LOGIC
-void ghostMultiplier(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score);
+void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score, int &gamestate, Audio &death, bool &edible, Clock &deathClock);
 void managePlayerState(Player &pacman);
-void manageGhostState(Player &ghost, float edibleTime, float edibleLimit);
 
 bool checkCollision(Player& object1, Player& object2);
 void findNode(Player& player, Node& node);
