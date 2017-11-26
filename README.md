@@ -6,7 +6,7 @@ Built using Simple and Fast Multimedia Library (SFML) and modeled after the orig
 
 ## Credits
 - [AnimatedSprite](https://github.com/SFML/SFML/wiki/Source:-AnimatedSprite) by Maximilian Wagenbach.
-- [Simple Collision Detection](https://github.com/SFML/SFML/wiki/Source%3A-Simple-Collision-Detection) by Nick Koirala and ahnonay.
+- [Simple Collision Detection for SFML 2](https://github.com/SFML/SFML/wiki/Source:-Simple-Collision-Detection-for-SFML-2) by Nick Koirala and ahnonay.
 
 ### Known Issues
 - Characters sometimes wander off the grid.
