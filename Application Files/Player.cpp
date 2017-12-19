@@ -18,36 +18,36 @@ Player::Player(std::string spritesheet, size_t spritesize, size_t numberofStates
     
     setOrigin(spritesize / 2, spritesize / 2);
     objtexture.loadFromFile(resourcePath() + "Graphics/" + spritesheet);
-    state = new Animation[numberofStates];
+    state = std::shared_ptr<Animation>(new Animation[numberofStates], std::default_delete<Animation[]>());
     
     for (int i = 0; i < numberofStates; i++) {
-        state[i].setSpriteSheet(objtexture);
+        state.get()[i].setSpriteSheet(objtexture);
         
         for (int j = 0; j < framesperState; j++) {
-            state[i].addFrame(IntRect(j * spritesize, i * spritesize, spritesize, spritesize));
+            state.get()[i].addFrame(IntRect(j * spritesize, i * spritesize, spritesize, spritesize));
         }
     }
-    play(state[0]);
+    play(state.get()[0]);
 }
 
 void Player::initialize(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
     setOrigin(spritesize / 2, spritesize / 2);
     objtexture.loadFromFile(resourcePath() + "Graphics/" + spritesheet);
-    state = new Animation[numberofStates];
+    state = std::shared_ptr<Animation>(new Animation[numberofStates], std::default_delete<Animation[]>());
     
     for (int i = 0; i < numberofStates; i++) {
-        state[i].setSpriteSheet(objtexture);
+        state.get()[i].setSpriteSheet(objtexture);
         
         for (int j = 0; j < framesperState; j++) {
-            state[i].addFrame(IntRect(j * spritesize, i * spritesize, spritesize, spritesize));
+            state.get()[i].addFrame(IntRect(j * spritesize, i * spritesize, spritesize, spritesize));
         }
     }
-    play(state[0]);
+    play(state.get()[0]);
 }
 
 void Player::switchState(size_t playerstate) {
     pstate = playerstate;
-    play(state[playerstate]);
+    play(state.get()[playerstate]);
 }
 
 void Player::setPlayerSpeed(float speed) {

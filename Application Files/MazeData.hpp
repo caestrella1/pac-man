@@ -7,17 +7,16 @@
 //
 #pragma once
 #include "Collision.hpp"
-using namespace sf;
 
 class MazeData {
 	Texture fruitTexture;
 
 public:
-    Player* powerPellet;
-    Player* pellet;
+    std::shared_ptr<Player> powerPellet;
+    std::shared_ptr<Player> pellet;
 
-	Node node[65];
-	Node ghostNode[7];
+    std::shared_ptr<Node> node;
+    std::shared_ptr<Node> ghostNode;
 
 	void loadPellets(int arraySize);
 	void placePellets(int arraySize);

@@ -9,7 +9,6 @@
 #ifndef Nodes_hpp
 #define Nodes_hpp
 #include "AnimatedSprite.hpp"
-#include <memory>
 
 class Node {
     RectangleShape mazenode;

@@ -14,7 +14,7 @@
 
 // GHOST LOGIC
 void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score, int &gamestate,
-                     Audio &death, bool &edible, Clock &deathClock);
+                     Audio &death, bool &edible, Clock &startClock);
 void managePlayerState(Player &pacman);
 
 bool checkCollision(Player& object1, Player& object2);
@@ -34,6 +34,6 @@ void toggleMute(bool &isMuted, Player &sound, Audio &chomp1, Audio &chomp2, Audi
 // RESETS
 void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit,
                 std::ostringstream &ss, Text &playerScore, Clock &startClock);
-void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde, MazeData &maze, float &edibleTime, int &gamestate);
+void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde, MazeData &maze, int &gamestate);
 
 #endif /* Game_hpp */

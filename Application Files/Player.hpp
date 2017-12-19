@@ -7,7 +7,7 @@
 //
 #pragma once
 #include "Nodes.hpp"
-using namespace sf;
+#include <memory>
 
 /* Directions */
 #define NONE       -1
@@ -37,7 +37,7 @@ using namespace sf;
 #define LOSER       5    // WHEN LIVES DROP TO ZERO
 
 class Player : public AnimatedSprite {
-    Animation* state;
+    std::shared_ptr<Animation> state;
     Texture objtexture;
     IntRect TextureRect;
     int pstate = 0;

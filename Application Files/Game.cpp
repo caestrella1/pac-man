@@ -9,7 +9,7 @@
 #include "Game.hpp"
 
 /***** GHOST LOGIC *****/
-void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score, int &gamestate, Audio &death, bool &edible, Clock &deathClock) {
+void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score, int &gamestate, Audio &death, bool &edible, Clock &startClock) {
     Vector2f position(512, 501);
     if (checkCollision(pacman, ghost) && ghost.isEdible) {
         ghostCount++;
@@ -34,7 +34,7 @@ void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostC
         managePlayerState(pacman);
         death.play();
         edible = false;
-        deathClock.restart().asSeconds();
+        startClock.restart().asSeconds();
     }
 }
 
@@ -160,7 +160,7 @@ void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, in
     startClock.restart().asSeconds();
 }
 
-void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde, MazeData &maze, float &edibleTime, int &gamestate) {
+void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde, MazeData &maze, int &gamestate) {
     Vector2f pacmanPos(512, 746), blinkyPos(512, 405), inkyPos(463, 501), pinkyPos(512, 501), clydePos(562, 501);
     
     pacman.setPosition(pacmanPos);
@@ -175,16 +175,9 @@ void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Play
     blinky.direction = inky.direction = pinky.direction = clyde.direction = NONE;
     blinky.isEdible = inky.isEdible = pinky.isEdible = clyde.isEdible = false;
     
-    if (gamestate == LOSER) {
-        edibleTime = 10;
-    }
-    else {
-        if (gamestate != STARTING) {
-            maze.placePellets(240);
-            maze.placePellets(4);
-        }
+    if (gamestate == WINNER || gamestate == STARTING || gamestate == PAUSED) {
+        maze.loadPellets(4);  maze.placePellets(4);
+        maze.loadPellets(240); maze.placePellets(240);
+
     }
 }
-
-
-
