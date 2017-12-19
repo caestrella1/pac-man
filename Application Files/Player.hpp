@@ -19,7 +19,6 @@ using namespace sf;
 /* PAC-MAN States */
 #define ALIVE       0
 #define DEAD        1
-#define REVIVED     2
 
 /* Ghost States */
 #define FACELEFT    0

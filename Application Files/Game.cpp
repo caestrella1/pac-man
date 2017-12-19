@@ -34,7 +34,6 @@ void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostC
         managePlayerState(pacman);
         death.play();
         edible = false;
-        death.play();
         deathClock.restart().asSeconds();
     }
 }
@@ -50,9 +49,6 @@ void managePlayerState(Player &pacman) {
         pacman.setFrame(0);
         pacman.direction = NONE;
         pacman.setRotation(0);
-    }
-    else if (pacman.getState() == REVIVED) {
-        pacman.setLooped(false);
     }
 }
 
@@ -132,9 +128,27 @@ void soundSwitcher(bool &isEdible, int &gamestate, Audio &siren, Audio &scatter)
     }
 }
 
+void toggleMute(bool &isMuted, Player &sound, Audio &chomp1, Audio &chomp2, Audio &scatter, Audio &theme, Audio &siren,
+                Audio &eatfruit, Audio &life, Audio &death, Audio &eatghost) {
+    float volume;
+    if (isMuted) {
+        volume = 100; isMuted = false;
+        sound.switchState(isMuted);
+    }
+    else {
+        volume = 0; isMuted = true;
+        sound.switchState(isMuted);
+    }
+    chomp1.setVolume(volume); chomp2.setVolume(volume);
+    scatter.setVolume(volume); siren.setVolume(volume);
+    eatfruit.setVolume(volume); eatghost.setVolume(volume);
+    life.setVolume(volume); death.setVolume(volume);
+    theme.setVolume(volume);
+}
+
 /***** RESETS *****/
-void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit, std::ostringstream &ss, Text &playerScore,
-        Clock &startClock) {
+void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit,
+                std::ostringstream &ss, Text &playerScore, Clock &startClock) {
     level = 1;
     fruit.switchState(0);
     lifeCount = 4;

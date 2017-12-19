@@ -68,7 +68,7 @@ int main() {
     /*** PLAYERS ***/
     float pacmanSpeed = 200, ghostSpeed = 120;
     Vector2f pacmanPos(512, 746), blinkyPos(512, 405), pinkyPos(512, 501), inkyPos(463, 501), clydePos(562, 501);
-    Player pacman("char-pacman.png", 16, 3, 20); pacman.setFrameTime(seconds(0.02));
+    Player pacman("char-pacman.png", 16, 2, 18); pacman.setFrameTime(seconds(0.025)); pacman.pause();
     Player blinky("char-blinky.png", 16, 6, 2); blinky.setFrameTime(seconds(0.25));
     Player inky("char-inky.png", 16, 6, 2); inky.setFrameTime(seconds(0.25));
     Player pinky("char-pinky.png", 16, 6, 2); pinky.setFrameTime(seconds(0.25));
@@ -91,6 +91,7 @@ int main() {
     // END PLAYERS
 
     /*** SOUNDS ***/
+    bool isMuted = false;
     Audio chomp1("chomp1.wav"), chomp2("chomp2.wav"), scatter("scatter.wav"), theme("theme.wav");
     Audio siren("siren.wav"), eatfruit("eatfruit.wav"), life("life.wav"), death("death.wav"), eatghost("eatghost.wav");
     scatter.setLoop(true); siren.setLoop(true); theme.play();
@@ -132,6 +133,10 @@ int main() {
         lives[i].setPosition(Vector2f(150 + ((spriteSize * 1.25) * i), 970));
     }
     // END VARIABLES
+    
+    Player sound("sound.png", 80, 2, 1);
+    sound.setPosition(Vector2f(860, 55));
+    sound.setScale(Vector2f(0.4, 0.4));
 
     /*** PAUSE STATE ***/
     Texture pauseBG, selectArrow;
@@ -204,6 +209,9 @@ int main() {
                     gamestate = PAUSED;
                     soundSwitcher(atLeastOneEdible, gamestate, siren, scatter);
                 }
+            }
+            else if (checkEvent.type == Event::KeyPressed && checkEvent.key.code == Keyboard::M) {
+                toggleMute(isMuted, sound, chomp1, chomp2, scatter, theme, siren, eatfruit, life, death, eatghost);
             }
             
 
@@ -297,7 +305,6 @@ int main() {
 
             startTime = startClock.getElapsedTime();
             if (deathTime.asSeconds() > 0.0 && deathTime.asSeconds() < 4.2) {
-                pacman.switchState(REVIVED);
                 managePlayerState(pacman);
             }
             if (startTime.asSeconds() >= 4.2) {
@@ -314,7 +321,7 @@ int main() {
             }
             deathTime = deathClock.getElapsedTime();
             
-            if (deathTime.asSeconds() >= 1.475) {
+            if (deathTime.asSeconds() >= 1.3) {
                 lifeCount--;    // DEDUCT LIFE AFTER DEATH ANIMATION
                 lifeCount < 0 ? gamestate = LOSER : gamestate = STARTING;
                 resetGame(pacman, blinky, inky, pinky, clyde, maze, edibleTime, gamestate);
@@ -482,6 +489,7 @@ int main() {
 
         window.draw(playerScore);
         window.draw(scoreText);
+        window.draw(sound);
 
         for (int i = 0; i < lifeCount; i++) {
             window.draw(lives[i]);
@@ -505,7 +513,7 @@ int main() {
         if (gamestate != LOSER) {
             window.draw(pacman);
         }
-        if (gamestate != DYING) {
+        if (gamestate != DYING && gamestate != WINNER) {
             window.draw(blinky);
             window.draw(inky);
             window.draw(pinky);
@@ -546,4 +554,5 @@ int main() {
     }
     return 0;
 }
+
 
