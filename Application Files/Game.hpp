@@ -10,6 +10,7 @@
 #define Game_hpp
 #include "MazeData.hpp"
 #include <sstream>
+#include <fstream>
 #include <iostream>
 
 // GHOST LOGIC
@@ -22,6 +23,8 @@ void findNode(Player& player, Node& node);
 
 // SCORE AND LEVELS
 void updatePoints(std::ostringstream &ss, int &score, Text &playerScore);
+int getHighScore();
+void saveHighScore(int score);
 void oneUp(int &score, int &lifeScore, int &lifeCount, Audio &life);
 void levelUp(int &pelletCount, int &level, float &looppitch, Audio &siren, Player &fruit, bool &isEaten);
 void setDifficulty(Player &blinky, Player &inky, Player &pinky, Player &clyde, float &edibleLimit);

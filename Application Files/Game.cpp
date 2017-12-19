@@ -69,6 +69,23 @@ void updatePoints(std::ostringstream &ss, int &score, Text &playerScore) {
     playerScore.setString(ss.str());
 }
 
+int getHighScore() {
+    std::ifstream readscore(".score");
+    if(readscore.is_open()) {
+        int score;
+        readscore >> score;
+        readscore.close();
+        return score;
+    }
+    return 0;
+}
+
+void saveHighScore(int score) {
+    std::ofstream writescore(".score");
+    writescore << score;
+    writescore.close();
+}
+
 void oneUp(int &score, int &lifeScore, int &lifeCount, Audio &life) {
     if (score >= lifeScore) { // GAIN A LIFE EVERY 10,000 POINTS
         if (lifeCount < 7) {

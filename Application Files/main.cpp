@@ -20,7 +20,7 @@ int main() {
     
     /*** VARIABLES ***/
     int ghostCount = 0, pelletCount = 0, lifeCount = 4, lifeScore = 10000;
-    int gamestate = STARTING, level = 1, score = 0;
+    int gamestate = STARTING, level = 1, score = 0, hiscore = getHighScore();
     float looppitch = 1.00, edibleLimit = 10.0;
     std::ostringstream ss;
     
@@ -39,24 +39,27 @@ int main() {
     maze.placeNodes(); maze.setValidNodeMovements();
 
     /*** TEXT ***/
-    addText playerScore, scoreText("SCORE"), ready("READY!"), gameover("GAME   OVER"), playAgain("PRESS SPACE TO PLAY AGAIN");
+    addText playerScore, playerHiScore, hiScoreText("HI SCORE"), ready("READY!"), gameover("GAME   OVER"), playAgain("PRESS SPACE TO PLAY AGAIN");
 
-    scoreText.setPosition(Vector2f(125, 40));
-    playerScore.setPosition(Vector2f(250, 40));
+    hiScoreText.setPosition(Vector2f(512, 40));
+    playerScore.setPosition(Vector2f(150, 40));
+    playerHiScore.setPosition(Vector2f(675, 40));
     ready.setPosition(Vector2f(450, 550));
     gameover.setPosition(Vector2f(370, 540));
     playAgain.setPosition(Vector2f(475, 40));
 
-    scoreText.setFillColor(Color(208, 62, 25));            // RED
-    playerScore.setFillColor(Color(255, 255, 255));        // WHITE
-    ready.setFillColor(Color(255, 255, 0));                // YELLOW
-    gameover.setFillColor(Color(208, 62, 25));            // RED
-    playAgain.setFillColor(Color(255, 255, 0));            // YELLOW
+    hiScoreText.setFillColor(Color(208, 62, 25));            // RED
+    playerHiScore.setFillColor(Color(255, 255, 255));        // WHITE
+    playerScore.setFillColor(Color(255, 255, 255));          // WHITE
+    ready.setFillColor(Color(255, 255, 0));                  // YELLOW
+    gameover.setFillColor(Color(208, 62, 25));               // RED
+    playAgain.setFillColor(Color(255, 255, 0));              // YELLOW
 
     ready.setCharacterSize(40);
     gameover.setCharacterSize(53);
 
     updatePoints(ss, score, playerScore);
+    updatePoints(ss, hiscore, playerHiScore);
     // END TEXT
 
     /*** PLAYERS ***/
@@ -301,6 +304,10 @@ int main() {
                 resetGame(pacman, blinky, inky, pinky, clyde, maze, gamestate);
                 lifeCount--;    // DEDUCT LIFE AFTER DEATH ANIMATION
                 lifeCount < 0 ? gamestate = LOSER : gamestate = STARTING;
+                if (gamestate == LOSER && score >= hiscore) {
+                    saveHighScore(hiscore);
+                    playerHiScore.setFillColor(Color(255, 255, 255));
+                }
             }
         }
         else if (gamestate == WINNER) {
@@ -348,6 +355,12 @@ int main() {
             ghostCollisions(pacman, clyde, eatghost, ghostCount, score, gamestate, death, atLeastOneEdible, startClock);
             soundSwitcher(atLeastOneEdible, gamestate, siren, scatter);
             updatePoints(ss, score, playerScore);
+            
+            if (score > hiscore) {
+                hiscore = score;
+                playerHiScore.setFillColor(Color(180, 180, 180));
+                updatePoints(ss, hiscore, playerHiScore);
+            }
             
             atLeastOneEdible = (blinky.isEdible || inky.isEdible || pinky.isEdible || clyde.isEdible);
             if (atLeastOneEdible) {
@@ -474,7 +487,8 @@ int main() {
         }
 
         window.draw(playerScore);
-        window.draw(scoreText);
+        window.draw(playerHiScore);
+        window.draw(hiScoreText);
         window.draw(sound);
 
         for (int i = 0; i < lifeCount; i++) {
@@ -508,7 +522,7 @@ int main() {
 
         if (gamestate == LOSER) {                   // GAME OVER (LOSING)
             window.draw(gameover);
-            window.draw(playAgain);
+//            window.draw(playAgain);
         }
         else if (gamestate == STARTING) {
             window.draw(ready);
