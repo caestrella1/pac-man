@@ -9,5 +9,5 @@ Built using Simple and Fast Multimedia Library (SFML) and modeled after the orig
 - [Simple Collision Detection for SFML 2](https://github.com/SFML/SFML/wiki/Source:-Simple-Collision-Detection-for-SFML-2) by Nick Koirala and ahnonay.
 
 ### Known Issues
-- Characters sometimes wander off the grid.
-- Ghosts move semi-randomly (Algorithm will eventually be implemented).
+- Characters move slowly on low-resolution displays. This is a compatibility issue with SFML.
+- Ghosts move semi-randomly (Pathfinding Algorithm may eventually be implemented).
