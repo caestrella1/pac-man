@@ -17,7 +17,7 @@ Player::Player(std::string spritesheet, size_t spritesize, size_t numberofStates
     TextureRect = textrect;
     
     setOrigin(spritesize / 2, spritesize / 2);
-    objtexture.loadFromFile(resourcePath() + "Graphics/" + spritesheet);
+    objtexture.loadFromFile("Resources/Graphics/" + spritesheet);
     state = std::shared_ptr<Animation>(new Animation[numberofStates], std::default_delete<Animation[]>());
     
     for (int i = 0; i < numberofStates; i++) {
@@ -32,7 +32,7 @@ Player::Player(std::string spritesheet, size_t spritesize, size_t numberofStates
 
 void Player::initialize(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
     setOrigin(spritesize / 2, spritesize / 2);
-    objtexture.loadFromFile(resourcePath() + "Graphics/" + spritesheet);
+    objtexture.loadFromFile("Resources/Graphics/" + spritesheet);
     state = std::shared_ptr<Animation>(new Animation[numberofStates], std::default_delete<Animation[]>());
     
     for (int i = 0; i < numberofStates; i++) {
@@ -51,7 +51,7 @@ void Player::switchState(size_t playerstate) {
 }
 
 void Player::setPlayerSpeed(float speed) {
-    speed_ = speed;
+    speed_ = speed / 120;
 }
 
 void Player::setAnimationSpeed(float speed) {
@@ -189,19 +189,19 @@ void Player::movePlayer(Time deltaTime, int gstate) {
 
     if (direction == RIGHT) {
         setRotation(0);
-        movement.x = speed_ * deltaTime.asSeconds();
+        movement.x = speed_;
     }
     else if (direction == LEFT) {
         setRotation(180);
-        movement.x = -speed_ * deltaTime.asSeconds();
+        movement.x = -speed_;
     }
     else if (direction == UP) {
         setRotation(270);
-        movement.y = -speed_ * deltaTime.asSeconds();
+        movement.y = -speed_;
     }
     else if (direction == DOWN) {
         setRotation(90);
-        movement.y = speed_ * deltaTime.asSeconds();
+        movement.y = speed_;
     }
 
     move(movement);
@@ -217,13 +217,13 @@ void Player::moveGhost(Time deltaTime, int gstate, float edibleTime, float edibl
     movement.x = 0.0; movement.y = 0.0;
     
     switch (direction) {
-        case RIGHT: movement.x = speed_ * deltaTime.asSeconds();
+        case RIGHT: movement.x = speed_;
             break;
-        case LEFT: movement.x = -speed_ * deltaTime.asSeconds();
+        case LEFT: movement.x = -speed_;
             break;
-        case UP: movement.y = -speed_ * deltaTime.asSeconds();
+        case UP: movement.y = -speed_;
             break;
-        case DOWN: movement.y = speed_ * deltaTime.asSeconds();
+        case DOWN: movement.y = speed_;
             break;
     }
     if (isEdible) {
@@ -261,62 +261,29 @@ int Player::findOpposite(int dir) {
     }
 }
 
-void Player::blinkyAI(Time deltaTime, Player pacman) {
-    /*    BLINKY LOGIC:
+/*      TODO: IMPLEMENT GHOST AI
+        BLINKY LOGIC:
         Follows directly behind PAC-MAN
         Always first out of ghost pen
-    */
-    
-    int directions[3], index = 0;
-    for (int i = 0; i < 4; i++) {
-        if (i != findOpposite(direction)) {
-            directions[index] = i;
-            index++;
-        }
-    }
-    queueDirection = directions[rand() % 3];
-}
-
-void Player::inkyAI(Time deltaTime, Player pacman) {
-    /*    INKY LOGIC:
+ 
+        INKY LOGIC:
         Uses PAC-MAN's position/direction and Blinky's position
         Exits ghost pen after PAC-MAN eats 30 pellets
-    */
-    int directions[3], index = 0;
-    for (int i = 0; i < 4; i++) {
-        if (i != findOpposite(direction)) {
-            directions[index] = i;
-            index++;
-        }
-    }
-    queueDirection = directions[rand() % 3];
-}
 
-void Player::pinkyAI(Time deltaTime, Player pacman) {
-    /*    PINKY LOGIC:
+        PINKY LOGIC:
         Ambushes PAC-MAN by positioning himself in his way
         Second out of pen, right on game start
-    */
-    int directions[3], index = 0;
-    for (int i = 0; i < 4; i++) {
-        if (i != findOpposite(direction)) {
-            directions[index] = i;
-            index++;
-        }
-    }
-    queueDirection = directions[rand() % 3];
-}
-
-void Player::clydeAI(Time deltaTime, Player pacman) {
-    /*    CLYDE LOGIC:
+ 
+        CLYDE LOGIC:
         Follows directly behind PAC-MAN like Blinky but scatters once he's too close
         Exits pen after 1/3 of pellets are eaten
-    */
-    int directions[3], index = 0;
+ */
+
+void Player::ghostAI() {
+    std::vector<int> directions;
     for (int i = 0; i < 4; i++) {
         if (i != findOpposite(direction)) {
-            directions[index] = i;
-            index++;
+            directions.push_back(i);
         }
     }
     queueDirection = directions[rand() % 3];

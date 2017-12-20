@@ -14,17 +14,17 @@ void ResizeView(const RenderWindow &window, View& view) { // ASPECT RATIO FUNCTI
 }
 
 Audio::Audio(std::string filename) {
-    buffer.loadFromFile(resourcePath() + "Audio/" + filename);
+    buffer.loadFromFile("Resources/Audio/" + filename);
     setBuffer(buffer);
 }
 
 addText::addText() {
-    gameFont.loadFromFile(resourcePath() + "/Graphics/font.ttf");
+    gameFont.loadFromFile("Resources/Graphics/font.ttf");
     setFont(gameFont);
 }
 
 addText::addText(std::string str) {
-    gameFont.loadFromFile(resourcePath() + "/Graphics/font.ttf");
+    gameFont.loadFromFile("Resources/Graphics/font.ttf");
     setFont(gameFont);
     setString(str);
 }

@@ -115,11 +115,12 @@ void setDifficulty(Player &blinky, Player &inky, Player &pinky, Player &clyde, f
     if (edibleLimit > 0.0) {
         edibleLimit -= 1.0;
     }
-    if (blinky.getPlayerSpeed() < 160) {
-        blinky.setPlayerSpeed(blinky.getPlayerSpeed() + 5);
-        inky.setPlayerSpeed(inky.getPlayerSpeed() + 5);
-        pinky.setPlayerSpeed(pinky.getPlayerSpeed() + 5);
-        clyde.setPlayerSpeed(clyde.getPlayerSpeed() + 5);
+    if (blinky.getPlayerSpeed() < 60) {
+        float newspeed = blinky.getPlayerSpeed() + 2;
+        blinky.setPlayerSpeed(newspeed);
+        inky.setPlayerSpeed(newspeed);
+        pinky.setPlayerSpeed(newspeed);
+        clyde.setPlayerSpeed(newspeed);
     }
 }
 

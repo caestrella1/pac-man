@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{50ebfbac-f171-48f1-b76d-897f195bde3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="My Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="My Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Pacman Resources\Graphics\Icons\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="External\AnimatedSprite.hpp">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Animation.hpp">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="External\Collision.hpp">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.hpp">
+      <Filter>My Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.hpp">
+      <Filter>My Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeData.hpp">
+      <Filter>My Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Nodes.hpp">
+      <Filter>My Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>My Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="External\AnimatedSprite.cpp">
+      <Filter>External</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Animation.cpp">
+      <Filter>External</Filter>
+    </ClCompile>
+    <ClCompile Include="External\Collision.cpp">
+      <Filter>External</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>My Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers.cpp">
+      <Filter>My Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>My Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeData.cpp">
+      <Filter>My Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Nodes.cpp">
+      <Filter>My Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>My Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PAC-MAN %2717.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

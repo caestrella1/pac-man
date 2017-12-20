@@ -63,7 +63,7 @@ int main() {
     // END TEXT
 
     /*** PLAYERS ***/
-    float pacmanSpeed = 200, ghostSpeed = 120;
+    float pacmanSpeed = 50, ghostSpeed = 35;
     Vector2f pacmanPos(512, 746), blinkyPos(512, 405), pinkyPos(512, 501), inkyPos(463, 501), clydePos(562, 501);
     Player pacman("char-pacman.png", 16, 2, 18); pacman.setFrameTime(seconds(0.025)); pacman.pause();
     Player blinky("char-blinky.png", 16, 6, 2); blinky.setFrameTime(seconds(0.25));
@@ -106,12 +106,12 @@ int main() {
     }
 
     Texture cherry, strawberry, orange, apple, watermelon, key;
-    cherry.loadFromFile(resourcePath() + "/Graphics/fruit-cherry.png");
-    strawberry.loadFromFile(resourcePath() + "/Graphics/fruit-strawberry.png");
-    orange.loadFromFile(resourcePath() + "/Graphics/fruit-orange.png");
-    apple.loadFromFile(resourcePath() + "/Graphics/fruit-apple.png");
-    watermelon.loadFromFile(resourcePath() + "/Graphics/fruit-watermelon.png");
-    key.loadFromFile(resourcePath() + "/Graphics/fruit-key.png");
+    cherry.loadFromFile("Resources/Graphics/fruit-cherry.png");
+    strawberry.loadFromFile("Resources/Graphics/fruit-strawberry.png");
+    orange.loadFromFile("Resources/Graphics/fruit-orange.png");
+    apple.loadFromFile("Resources/Graphics/fruit-apple.png");
+    watermelon.loadFromFile("Resources/Graphics/fruit-watermelon.png");
+    key.loadFromFile("Resources/Graphics/fruit-key.png");
 
     fruitSprite[0].setTexture(&cherry);
     fruitSprite[1].setTexture(&strawberry);
@@ -123,7 +123,7 @@ int main() {
 
     RectangleShape lives[7];
     Texture livesTexture;
-    livesTexture.loadFromFile(resourcePath() + "/Graphics/maze-lives.png");
+    livesTexture.loadFromFile("Resources/Graphics/maze-lives.png");
     for (int i = 0; i < 7; i++) {
         lives[i].setSize(Vector2f(spriteSize, spriteSize));
         lives[i].setTexture(&livesTexture);
@@ -136,8 +136,8 @@ int main() {
 
     /*** PAUSE STATE ***/
     Texture pauseBG, selectArrow;
-    pauseBG.loadFromFile(resourcePath() + "/Graphics/menu-bg.png");
-    selectArrow.loadFromFile(resourcePath() + "/Graphics/menu-select.png");
+    pauseBG.loadFromFile("Resources/Graphics/menu-bg.png");
+    selectArrow.loadFromFile("Resources/Graphics/menu-select.png");
 
     RectangleShape pauseOpacity, pauseMenu, select;
     Vector2f selectPos(380, 365);
@@ -344,10 +344,10 @@ int main() {
                 findNode(clyde, maze.ghostNode.get()[i]);
             }
             
-            blinky.blinkyAI(deltaTime, pacman);
-            inky.inkyAI(deltaTime, pacman);
-            pinky.pinkyAI(deltaTime, pacman);
-            clyde.clydeAI(deltaTime, pacman);
+            blinky.ghostAI();
+            inky.ghostAI();
+            pinky.ghostAI();
+            clyde.ghostAI();
 
             ghostCollisions(pacman, blinky, eatghost, ghostCount, score, gamestate, death, atLeastOneEdible, startClock);
             ghostCollisions(pacman, inky, eatghost, ghostCount, score, gamestate, death, atLeastOneEdible, startClock);

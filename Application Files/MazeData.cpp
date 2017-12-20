@@ -419,5 +419,11 @@ void MazeData::teleportPlayer(Player &player) {
     else if (player.getPosition().x >= WinX - 100) {
         player.setPosition(Vector2f(100, player.getPosition().y));
     }
+    else if (player.getPosition().y <= 0) {
+        player.setPosition(Vector2f(player.getPosition().x, WinY));
+    }
+    else if (player.getPosition().y >= WinY) {
+        player.setPosition(Vector2f(player.getPosition().x, 0));
+    }
 }
 

@@ -55,7 +55,7 @@ public:
     void switchState(size_t playerstate);
     int getState() { return pstate; }
     void setPlayerSpeed(float speed);
-    float getPlayerSpeed() { return speed_; }
+    float getPlayerSpeed() { return speed_ * 120; }
     void setAnimationSpeed(float speed);
     
     IntRect getTextureRect();
@@ -66,10 +66,7 @@ public:
     void movePlayer(Time deltaTime, int gstate);
     void moveGhost(Time deltaTime, int gstate, float edibleTime, float edibleLimit);
 
-    void blinkyAI(Time deltaTime, Player pacman);
-    void inkyAI(Time deltaTime, Player pacman);
-    void pinkyAI(Time deltaTime, Player pacman);
-    void clydeAI(Time deltaTime, Player pacman);
+    void ghostAI();
 
 private:
     bool isCurrentDirectionValid(Node node, int choosedirection);
