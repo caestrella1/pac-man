@@ -36,7 +36,7 @@
 		0791DA6B1FC38DF700873076 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		079916C81FBD8F020060A752 /* Helpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Helpers.cpp; sourceTree = "<group>"; };
 		079916C91FBD8F020060A752 /* Helpers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Helpers.hpp; sourceTree = "<group>"; };
-		079AF1AC1FBD68A600030054 /* PAC-MAN 2017.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PAC-MAN 2017.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		079AF1AC1FBD68A600030054 /* PAC-MAN 2017.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "PAC-MAN 2017.app"; path = "PAC-MAN.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		079AF1B01FBD68A600030054 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		079AF1B11FBD68A600030054 /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
 		079AF1B31FBD68A600030054 /* ResourcePath.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePath.hpp; sourceTree = "<group>"; };
@@ -176,6 +176,11 @@
 					079AF1AB1FBD68A600030054 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.Mac = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};

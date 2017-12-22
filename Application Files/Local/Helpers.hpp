@@ -19,7 +19,13 @@ using namespace sf;
 #define pelletSize 8
 #define powerPelletSize 26
 
+#ifdef __APPLE__
+#include "ResourcePath.hpp"
+#endif
+
+#ifndef __APPLE__
 std::string resourcePath();
+#endif
 
 static const float WinLength = WinX, WinHeight = WinY;
 
