@@ -46,31 +46,30 @@ public:
     int direction = NONE, queueDirection = NONE, tryDirection = NONE;
     bool WASDkeys = true, isEdible = false;
     Vector2f movement;
-    float speed_;
+    float m_speed;
     
     Player(float speed = 10);
     Player(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed = 10);
-    void initialize(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed = 10);
-    
-    void switchState(size_t playerstate);
-    int getState() { return pstate; }
-    void setPlayerSpeed(float speed);
-    float getPlayerSpeed() { return speed_ * 120; }
-    void setAnimationSpeed(float speed);
+    void create(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed = 10);
     
     IntRect getTextureRect();
-
-    void nextDirection();
-    void setDirectionAtNode(Node node);
-    void setDirectionOpposite();
-    void movePlayer(Time deltaTime, int gstate);
-    void moveGhost(Time deltaTime, int gstate, float edibleTime, float edibleLimit);
-
-    void ghostAI();
-
+    
+    void setState(size_t playerstate);
+    int getState() { return pstate; }
+    void manageState();
+    
+    void setPlayerSpeed(float speed);
+    float getPlayerSpeed() { return m_speed * 120; }
+    void setAnimationSpeed(float speed);
+    
 private:
     bool isCurrentDirectionValid(Node node, int choosedirection);
     int findOpposite(int dir);
+
+public:
+    void setDirection();
+    void setDirectionAtNode(Node node);
+    void movePlayer(Time deltaTime, int gstate);
 };
 
 

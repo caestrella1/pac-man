@@ -9,7 +9,8 @@
 #include "Game.hpp"
 
 /***** GHOST LOGIC *****/
-void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score, int &gamestate, Audio &death, bool &edible, Clock &startClock) {
+void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score,
+                     int &gamestate, Audio &death, bool &edible, Clock &startClock) {
     Vector2f position(512, 501);
     if (checkCollision(pacman, ghost) && ghost.isEdible) {
         ghostCount++;
@@ -30,25 +31,11 @@ void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostC
     }
     else if (checkCollision(pacman, ghost) && !ghost.isEdible) {
         gamestate = DYING;
-        pacman.switchState(DEAD);
-        managePlayerState(pacman);
+        pacman.setState(DEAD);
+        pacman.manageState();
         death.play();
         edible = false;
         startClock.restart().asSeconds();
-    }
-}
-
-void managePlayerState(Player &pacman) {
-    if (pacman.getState() == ALIVE) {
-        pacman.setFrameTime(seconds(0.01));
-        pacman.setLooped(true);
-    }
-    else if (pacman.getState() == DEAD) {
-        pacman.setFrameTime(seconds(0.075));
-        pacman.setLooped(false);
-        pacman.setFrame(0);
-        pacman.direction = NONE;
-        pacman.setRotation(0);
     }
 }
 
@@ -96,16 +83,15 @@ void oneUp(int &score, int &lifeScore, int &lifeCount, Audio &life) {
     }
 }
 
-void levelUp(int &pelletCount, int &level, float &looppitch, Audio &siren, Player &fruit, bool &isEaten) {
+void levelUp(int &pelletCount, int &level, float &looppitch, Audio &siren, Player &fruit) {
     level++;
     if (level < 7) {
-        fruit.switchState(level - 1);
+        fruit.setState(level - 1);
     }
     else {
-        fruit.switchState(5);
+        fruit.setState(5);
     }
     fruit.setPosition(Vector2f(512, 576));
-    isEaten = false;
     pelletCount = 0;
     looppitch = 1.0;
     siren.setPitch(looppitch);
@@ -146,16 +132,16 @@ void soundSwitcher(bool &isEdible, int &gamestate, Audio &siren, Audio &scatter)
     }
 }
 
-void toggleMute(bool &isMuted, Player &sound, Audio &chomp1, Audio &chomp2, Audio &scatter, Audio &theme, Audio &siren,
-                Audio &eatfruit, Audio &life, Audio &death, Audio &eatghost) {
+void toggleMute(bool &isMuted, Player &sound, Audio &chomp1, Audio &chomp2, Audio &scatter, Audio &theme,
+                Audio &siren, Audio &eatfruit, Audio &life, Audio &death, Audio &eatghost) {
     float volume;
     if (isMuted) {
         volume = 100; isMuted = false;
-        sound.switchState(isMuted);
+        sound.setState(isMuted);
     }
     else {
         volume = 0; isMuted = true;
-        sound.switchState(isMuted);
+        sound.setState(isMuted);
     }
     chomp1.setVolume(volume); chomp2.setVolume(volume);
     scatter.setVolume(volume); siren.setVolume(volume);
@@ -165,10 +151,10 @@ void toggleMute(bool &isMuted, Player &sound, Audio &chomp1, Audio &chomp2, Audi
 }
 
 /***** RESETS *****/
-void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch, Player &fruit,
-                std::ostringstream &ss, Text &playerScore, Clock &startClock) {
+void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch,
+                Player &fruit, std::ostringstream &ss, Text &playerScore, Clock &startClock) {
     level = 1;
-    fruit.switchState(0);
+    fruit.setState(0);
     lifeCount = 4;
     pelletCount = 0;
     score = 0;
@@ -188,7 +174,7 @@ void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Play
     pacman.setFrame(0);
     
     blinky.setPosition(blinkyPos); inky.setPosition(inkyPos); pinky.setPosition(pinkyPos); clyde.setPosition(clydePos);
-    blinky.switchState(FACERIGHT); inky.switchState(FACEUP); pinky.switchState(FACEDOWN); clyde.switchState(FACEUP);
+    blinky.setState(FACERIGHT); inky.setState(FACEUP); pinky.setState(FACEDOWN); clyde.setState(FACEUP);
     blinky.queueDirection = inky.queueDirection = pinky.queueDirection = clyde.queueDirection = NONE;
     blinky.direction = inky.direction = pinky.direction = clyde.direction = NONE;
     blinky.isEdible = inky.isEdible = pinky.isEdible = clyde.isEdible = false;

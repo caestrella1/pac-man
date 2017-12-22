@@ -35,7 +35,7 @@
 
 #ifndef COLLISION_HPP
 #define COLLISION_HPP
-#include "Player.hpp"
+#include "Ghost.hpp"
 
 namespace Collision {
     //////

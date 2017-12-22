@@ -10,7 +10,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Audio.hpp>
-#include <SFML/Window.hpp>
 #include <string>
 using namespace sf;
 
@@ -22,17 +21,10 @@ using namespace sf;
 
 static const float WinLength = WinX, WinHeight = WinY;
 
-void ResizeView(const RenderWindow &window, View& view); // ASPECT RATIO FUNCTION
+void ResizeView(const RenderWindow &window, View& view);
 
 class Audio : public Sound {
     SoundBuffer buffer;
 public:
     Audio(std::string filename);
-};
-
-class addText : public Text {
-    Font gameFont;
-public:
-    addText();
-    addText(std::string str);
 };

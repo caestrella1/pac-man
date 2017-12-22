@@ -17,14 +17,3 @@ Audio::Audio(std::string filename) {
     buffer.loadFromFile("Resources/Audio/" + filename);
     setBuffer(buffer);
 }
-
-addText::addText() {
-    gameFont.loadFromFile("Resources/Graphics/font.ttf");
-    setFont(gameFont);
-}
-
-addText::addText(std::string str) {
-    gameFont.loadFromFile("Resources/Graphics/font.ttf");
-    setFont(gameFont);
-    setString(str);
-}

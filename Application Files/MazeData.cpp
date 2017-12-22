@@ -12,7 +12,7 @@ void MazeData::loadPellets(int arraySize) {
 	if (arraySize == 4) {
         powerPellet = std::shared_ptr<Player>(new Player[arraySize], std::default_delete<Player[]>());
 		for (int i = 0; i < arraySize; i++) {
-            powerPellet.get()[i].initialize("maze-ppellet.png", 8, 1, 2);
+            powerPellet.get()[i].create("maze-ppellet.png", 8, 1, 2);
             powerPellet.get()[i].setFrameTime(seconds(0.5));
             powerPellet.get()[i].setOrigin(4, 4);
             powerPellet.get()[i].setScale(3, 3);
@@ -22,7 +22,7 @@ void MazeData::loadPellets(int arraySize) {
 	else if (arraySize == 240) {
         pellet = std::shared_ptr<Player>(new Player[arraySize], std::default_delete<Player[]>());
 		for (int i = 0; i < arraySize; i++) {
-            pellet.get()[i].initialize("maze-pellet.png", 8, 2, 1);
+            pellet.get()[i].create("maze-pellet.png", 8, 2, 1);
             pellet.get()[i].setOrigin(4, 4);
             pellet.get()[i].play();
 		}
@@ -321,7 +321,7 @@ void MazeData::setValidNodeMovements() {
     ghostNode.get()[3].setValidDirections(false, true, true, false);
     
     ghostNode.get()[4].setValidDirections(true, false, false, true);
-    ghostNode.get()[5].setValidDirections(true, false, true, true);
+    ghostNode.get()[5].setValidDirections(true, false, false, false);
     ghostNode.get()[6].setValidDirections(true, false, true, false);
     
     // ROW 1

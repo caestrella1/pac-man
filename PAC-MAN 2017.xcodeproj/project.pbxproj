@@ -16,6 +16,7 @@
 		0791DA6C1FC38DF700873076 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0791DA6B1FC38DF700873076 /* Images.xcassets */; };
 		079916CA1FBD8F020060A752 /* Helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 079916C81FBD8F020060A752 /* Helpers.cpp */; };
 		079AF1B21FBD68A600030054 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 079AF1B11FBD68A600030054 /* ResourcePath.mm */; };
+		07A04EA01FEC62F8000BE7E7 /* Ghost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07A04E9E1FEC62F8000BE7E7 /* Ghost.cpp */; };
 		07C19A701FC02601002C86E6 /* Nodes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07C19A6E1FC02601002C86E6 /* Nodes.cpp */; };
 		07E4A7091FC3BDF100BB4A8A /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07E4A7071FC3BDF100BB4A8A /* Animation.cpp */; };
 		07E4A70C1FC3BF0700BB4A8A /* AnimatedSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07E4A70A1FC3BF0700BB4A8A /* AnimatedSprite.cpp */; };
@@ -24,7 +25,6 @@
 
 /* Begin PBXFileReference section */
 		073694CE1FC3A13700E1452F /* Graphics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Graphics; path = Resources/Graphics; sourceTree = "<group>"; };
-		073ED3F71FBD8991009B00DE /* MazeData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MazeData.hpp; path = "/Users/Carlos/Software/Projects/Personal/PAC-MAN 2017/Application Files/MazeData.hpp"; sourceTree = "<absolute>"; };
 		07573B1A1FBEADC100FD9F55 /* Game.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Game.hpp; sourceTree = "<group>"; };
 		07573B1B1FBEADC100FD9F55 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
 		07573B1C1FBEADC200FD9F55 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -32,6 +32,7 @@
 		0767ADBC1FBD6E3900BF649A /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		0767ADBD1FBD6E3900BF649A /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
 		0767ADCD1FBD753F00BF649A /* Audio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Audio; path = Resources/Audio; sourceTree = "<group>"; };
+		077B1AE21FEC20A300A94C5E /* MazeData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MazeData.hpp; sourceTree = "<group>"; };
 		0791DA6B1FC38DF700873076 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		079916C81FBD8F020060A752 /* Helpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Helpers.cpp; sourceTree = "<group>"; };
 		079916C91FBD8F020060A752 /* Helpers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Helpers.hpp; sourceTree = "<group>"; };
@@ -39,6 +40,8 @@
 		079AF1B01FBD68A600030054 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		079AF1B11FBD68A600030054 /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
 		079AF1B31FBD68A600030054 /* ResourcePath.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePath.hpp; sourceTree = "<group>"; };
+		07A04E9E1FEC62F8000BE7E7 /* Ghost.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ghost.cpp; sourceTree = "<group>"; };
+		07A04E9F1FEC62F8000BE7E7 /* Ghost.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ghost.hpp; sourceTree = "<group>"; };
 		07C19A6E1FC02601002C86E6 /* Nodes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Nodes.cpp; sourceTree = "<group>"; };
 		07C19A6F1FC02601002C86E6 /* Nodes.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Nodes.hpp; sourceTree = "<group>"; };
 		07E4A7071FC3BDF100BB4A8A /* Animation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Animation.cpp; sourceTree = "<group>"; };
@@ -98,7 +101,9 @@
 				07C19A6E1FC02601002C86E6 /* Nodes.cpp */,
 				0767ADBD1FBD6E3900BF649A /* Player.hpp */,
 				0767ADBC1FBD6E3900BF649A /* Player.cpp */,
-				073ED3F71FBD8991009B00DE /* MazeData.hpp */,
+				07A04E9F1FEC62F8000BE7E7 /* Ghost.hpp */,
+				07A04E9E1FEC62F8000BE7E7 /* Ghost.cpp */,
+				077B1AE21FEC20A300A94C5E /* MazeData.hpp */,
 				0767ADB61FBD6E3800BF649A /* MazeData.cpp */,
 				079AF1B01FBD68A600030054 /* Info.plist */,
 			);
@@ -222,6 +227,7 @@
 				07573B1E1FBEADC200FD9F55 /* main.cpp in Sources */,
 				0767ADBE1FBD6E3900BF649A /* MazeData.cpp in Sources */,
 				07573B1D1FBEADC200FD9F55 /* Game.cpp in Sources */,
+				07A04EA01FEC62F8000BE7E7 /* Ghost.cpp in Sources */,
 				07C19A701FC02601002C86E6 /* Nodes.cpp in Sources */,
 				07ECC57D1FC438C9009385C1 /* Collision.cpp in Sources */,
 				079AF1B21FBD68A600030054 /* ResourcePath.mm in Sources */,

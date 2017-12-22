@@ -30,14 +30,14 @@ Player::Player(std::string spritesheet, size_t spritesize, size_t numberofStates
     play(state.get()[0]);
 }
 
-void Player::initialize(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
+void Player::create(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
     setOrigin(spritesize / 2, spritesize / 2);
     objtexture.loadFromFile("Resources/Graphics/" + spritesheet);
     state = std::shared_ptr<Animation>(new Animation[numberofStates], std::default_delete<Animation[]>());
-    
+
     for (int i = 0; i < numberofStates; i++) {
         state.get()[i].setSpriteSheet(objtexture);
-        
+
         for (int j = 0; j < framesperState; j++) {
             state.get()[i].addFrame(IntRect(j * spritesize, i * spritesize, spritesize, spritesize));
         }
@@ -45,21 +45,41 @@ void Player::initialize(std::string spritesheet, size_t spritesize, size_t numbe
     play(state.get()[0]);
 }
 
-void Player::switchState(size_t playerstate) {
+IntRect Player::getTextureRect() {
+    return TextureRect;
+}
+
+void Player::setState(size_t playerstate) {
     pstate = playerstate;
     play(state.get()[playerstate]);
 }
 
+void Player::manageState() {
+    if (getState() == ALIVE) {
+        setFrameTime(seconds(0.01));
+        setLooped(true);
+    }
+    else if (getState() == DEAD) {
+        setFrameTime(seconds(0.075));
+        setLooped(false);
+        setFrame(0);
+        direction = NONE;
+        setRotation(0);
+    }
+}
+
 void Player::setPlayerSpeed(float speed) {
-    speed_ = speed / 120;
+    #ifdef __APPLE__
+        #define SCALE 120
+    #else
+        #define SCALE 60
+    #endif
+    
+    m_speed = speed / SCALE;
 }
 
 void Player::setAnimationSpeed(float speed) {
     setFrameTime(seconds(speed));
-}
-
-IntRect Player::getTextureRect() {
-    return TextureRect;
 }
 
 bool Player::isCurrentDirectionValid(Node node, int dir) {
@@ -78,26 +98,67 @@ bool Player::isCurrentDirectionValid(Node node, int dir) {
     return false;
 }
 
-void Player::nextDirection() {
+int Player::findOpposite(int dir) {
+    switch (dir) {
+        case RIGHT: return LEFT;
+        case LEFT: return RIGHT;
+        case UP: return DOWN;
+        case DOWN: return UP;
+    }
+}
+
+void Player::setDirection() {
     if (WASDkeys) {
-        if (Keyboard::isKeyPressed(Keyboard::D))
-            queueDirection = RIGHT;
-        else if (Keyboard::isKeyPressed(Keyboard::A))
+        if (Keyboard::isKeyPressed(Keyboard::A)) {
             queueDirection = LEFT;
-        else if (Keyboard::isKeyPressed(Keyboard::W))
+            if (queueDirection == findOpposite(direction)) {
+                direction = findOpposite(direction);
+            }
+        }
+        else if (Keyboard::isKeyPressed(Keyboard::D)) {
+            queueDirection = RIGHT;
+            if (queueDirection == findOpposite(direction)) {
+                direction = findOpposite(direction);
+            }
+        }
+        else if (Keyboard::isKeyPressed(Keyboard::W)) {
             queueDirection = UP;
-        else if (Keyboard::isKeyPressed(Keyboard::S))
+            if (queueDirection == findOpposite(direction)) {
+                direction = findOpposite(direction);
+            }
+        }
+        else if (Keyboard::isKeyPressed(Keyboard::S)) {
             queueDirection = DOWN;
+            if (queueDirection == findOpposite(direction)) {
+                direction = findOpposite(direction);
+            }
+        }
     }
     else {
-        if (Keyboard::isKeyPressed(Keyboard::Right))
-            queueDirection = RIGHT;
-        else if (Keyboard::isKeyPressed(Keyboard::Left))
+        if (Keyboard::isKeyPressed(Keyboard::Left)) {
             queueDirection = LEFT;
-        else if (Keyboard::isKeyPressed(Keyboard::Up))
+            if (queueDirection == findOpposite(direction)) {
+                direction = findOpposite(direction);
+            }
+        }
+        else if (Keyboard::isKeyPressed(Keyboard::Right)) {
+            queueDirection = RIGHT;
+            if (queueDirection == findOpposite(direction)) {
+                direction = findOpposite(direction);
+            }
+        }
+        else if (Keyboard::isKeyPressed(Keyboard::Up)) {
             queueDirection = UP;
-        else if (Keyboard::isKeyPressed(Keyboard::Down))
+            if (queueDirection == findOpposite(direction)) {
+                direction = findOpposite(direction);
+            }
+        }
+        else if (Keyboard::isKeyPressed(Keyboard::Down)) {
             queueDirection = DOWN;
+            if (queueDirection == findOpposite(direction)) {
+                direction = findOpposite(direction);
+            }
+        }
     }
 }
 
@@ -144,37 +205,6 @@ void Player::setDirectionAtNode(Node node) {
     }
 }
 
-void Player::setDirectionOpposite() {
-    if (WASDkeys) {
-        if (direction == RIGHT)
-            if (Keyboard::isKeyPressed(Keyboard::A))
-                direction = LEFT;
-        if (direction == LEFT)
-            if (Keyboard::isKeyPressed(Keyboard::D))
-                direction = RIGHT;
-        if (direction == UP)
-            if (Keyboard::isKeyPressed(Keyboard::S))
-                direction = DOWN;
-        if (direction == DOWN)
-            if (Keyboard::isKeyPressed(Keyboard::W))
-                direction = UP;
-    }
-    else {
-        if (direction == RIGHT)
-            if (Keyboard::isKeyPressed(Keyboard::Left))
-                direction = LEFT;
-        if (direction == LEFT)
-            if (Keyboard::isKeyPressed(Keyboard::Right))
-                direction = RIGHT;
-        if (direction == UP)
-            if (Keyboard::isKeyPressed(Keyboard::Down))
-                direction = DOWN;
-        if (direction == DOWN)
-            if (Keyboard::isKeyPressed(Keyboard::Up))
-                direction = UP;
-    }
-}
-
 void Player::movePlayer(Time deltaTime, int gstate) {
     if (gstate != PLAYING) {
         if (getState() == DEAD) {
@@ -189,103 +219,21 @@ void Player::movePlayer(Time deltaTime, int gstate) {
 
     if (direction == RIGHT) {
         setRotation(0);
-        movement.x = speed_;
+        movement.x = m_speed;
     }
     else if (direction == LEFT) {
         setRotation(180);
-        movement.x = -speed_;
+        movement.x = -m_speed;
     }
     else if (direction == UP) {
         setRotation(270);
-        movement.y = -speed_;
+        movement.y = -m_speed;
     }
     else if (direction == DOWN) {
         setRotation(90);
-        movement.y = speed_;
+        movement.y = m_speed;
     }
 
     move(movement);
     (movement.x > 0.0 || movement.x < 0.0 || movement.y > 0.0 || movement.y < 0.0) ? play() : pause();
 }
-
-void Player::moveGhost(Time deltaTime, int gstate, float edibleTime, float edibleLimit) {
-    if (gstate != PLAYING) {
-        pause();
-        return;
-    }
-    
-    movement.x = 0.0; movement.y = 0.0;
-    
-    switch (direction) {
-        case RIGHT: movement.x = speed_;
-            break;
-        case LEFT: movement.x = -speed_;
-            break;
-        case UP: movement.y = -speed_;
-            break;
-        case DOWN: movement.y = speed_;
-            break;
-    }
-    if (isEdible) {
-        (edibleTime >= (edibleLimit / 1.5) && edibleTime < edibleLimit) ? switchState(BLINK) : switchState(SCATTER);
-    }
-    else {
-        switch (direction) {
-            case RIGHT: switchState(FACERIGHT);
-                break;
-            case LEFT: switchState(FACELEFT);
-                break;
-            case UP: switchState(FACEUP);
-                break;
-            case DOWN: switchState(FACEDOWN);
-                break;
-        }
-    }
-
-    move(movement);
-    (movement.x > 0.0 || movement.x < 0.0 || movement.y > 0.0 || movement.y < 0.0) ? play() : pause();
-}
-
-int Player::findOpposite(int dir) {
-    if (dir == RIGHT) {
-        return LEFT;
-    }
-    else if (dir == LEFT) {
-        return RIGHT;
-    }
-    else if (dir == UP) {
-        return DOWN;
-    }
-    else if (dir == DOWN) {
-        return UP;
-    }
-}
-
-/*      TODO: IMPLEMENT GHOST AI
-        BLINKY LOGIC:
-        Follows directly behind PAC-MAN
-        Always first out of ghost pen
- 
-        INKY LOGIC:
-        Uses PAC-MAN's position/direction and Blinky's position
-        Exits ghost pen after PAC-MAN eats 30 pellets
-
-        PINKY LOGIC:
-        Ambushes PAC-MAN by positioning himself in his way
-        Second out of pen, right on game start
- 
-        CLYDE LOGIC:
-        Follows directly behind PAC-MAN like Blinky but scatters once he's too close
-        Exits pen after 1/3 of pellets are eaten
- */
-
-void Player::ghostAI() {
-    std::vector<int> directions;
-    for (int i = 0; i < 4; i++) {
-        if (i != findOpposite(direction)) {
-            directions.push_back(i);
-        }
-    }
-    queueDirection = directions[rand() % 3];
-}
-
