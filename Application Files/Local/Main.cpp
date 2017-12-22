@@ -27,7 +27,7 @@ int main() {
     std::ostringstream ss;
 
     /*** TEXT ***/
-    Font font; font.loadFromFile("Resources/Graphics/font.ttf");
+    Font font; font.loadFromFile(RESOURCES + "Graphics/font.ttf");
     Text playerScore("", font), playerHiScore("", font), ready("READY!", font, 40),
     gameover("GAME   OVER", font, 53), hiScoreText("HI SCORE", font);
 
@@ -90,12 +90,12 @@ int main() {
     }
 
     Texture cherry, strawberry, orange, apple, watermelon, key;
-    cherry.loadFromFile("Resources/Graphics/fruit-cherry.png");
-    strawberry.loadFromFile("Resources/Graphics/fruit-strawberry.png");
-    orange.loadFromFile("Resources/Graphics/fruit-orange.png");
-    apple.loadFromFile("Resources/Graphics/fruit-apple.png");
-    watermelon.loadFromFile("Resources/Graphics/fruit-watermelon.png");
-    key.loadFromFile("Resources/Graphics/fruit-key.png");
+    cherry.loadFromFile(RESOURCES + "Graphics/fruit-cherry.png");
+    strawberry.loadFromFile(RESOURCES + "Graphics/fruit-strawberry.png");
+    orange.loadFromFile(RESOURCES + "Graphics/fruit-orange.png");
+    apple.loadFromFile(RESOURCES + "Graphics/fruit-apple.png");
+    watermelon.loadFromFile(RESOURCES + "Graphics/fruit-watermelon.png");
+    key.loadFromFile(RESOURCES + "Graphics/fruit-key.png");
 
     fruitSprite[0].setTexture(&cherry);
     fruitSprite[1].setTexture(&strawberry);
@@ -107,7 +107,7 @@ int main() {
 
     RectangleShape lives[7];
     Texture livesTexture;
-    livesTexture.loadFromFile("Resources/Graphics/maze-lives.png");
+    livesTexture.loadFromFile(RESOURCES + "Graphics/maze-lives.png");
     for (int i = 0; i < 7; i++) {
         lives[i].setSize(Vector2f(spriteSize, spriteSize));
         lives[i].setTexture(&livesTexture);
@@ -120,8 +120,8 @@ int main() {
 
     /*** PAUSE STATE ***/
     Texture pauseBG, selectArrow;
-    pauseBG.loadFromFile("Resources/Graphics/menu-bg.png");
-    selectArrow.loadFromFile("Resources/Graphics/menu-select.png");
+    pauseBG.loadFromFile(RESOURCES + "Graphics/menu-bg.png");
+    selectArrow.loadFromFile(RESOURCES + "Graphics/menu-select.png");
 
     RectangleShape pauseOpacity, pauseMenu, select;
     Vector2f selectPos(380, 365);

@@ -13,6 +13,13 @@
 #include <string>
 using namespace sf;
 
+#ifdef __APPLE__
+#include "ResourcePath.hpp"
+#define RESOURCES resourcePath()
+#else
+#define RESOURCES "Resources/"
+#endif
+
 #define WinX 1024
 #define WinY 1024
 #define spriteSize 42

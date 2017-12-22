@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		073694CF1FC3A13700E1452F /* Graphics in Resources */ = {isa = PBXBuildFile; fileRef = 073694CE1FC3A13700E1452F /* Graphics */; };
 		07573B1D1FBEADC200FD9F55 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07573B1B1FBEADC100FD9F55 /* Game.cpp */; };
-		07573B1E1FBEADC200FD9F55 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07573B1C1FBEADC200FD9F55 /* main.cpp */; };
+		07573B1E1FBEADC200FD9F55 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07573B1C1FBEADC200FD9F55 /* Main.cpp */; };
 		0767ADBE1FBD6E3900BF649A /* MazeData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0767ADB61FBD6E3800BF649A /* MazeData.cpp */; };
 		0767ADC21FBD6E3900BF649A /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0767ADBC1FBD6E3900BF649A /* Player.cpp */; };
 		0767ADCF1FBD753F00BF649A /* Audio in Resources */ = {isa = PBXBuildFile; fileRef = 0767ADCD1FBD753F00BF649A /* Audio */; };
@@ -27,7 +27,7 @@
 		073694CE1FC3A13700E1452F /* Graphics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Graphics; path = Resources/Graphics; sourceTree = "<group>"; };
 		07573B1A1FBEADC100FD9F55 /* Game.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Game.hpp; sourceTree = "<group>"; };
 		07573B1B1FBEADC100FD9F55 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
-		07573B1C1FBEADC200FD9F55 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		07573B1C1FBEADC200FD9F55 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
 		0767ADB61FBD6E3800BF649A /* MazeData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MazeData.cpp; sourceTree = "<group>"; };
 		0767ADBC1FBD6E3900BF649A /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		0767ADBD1FBD6E3900BF649A /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
@@ -82,19 +82,35 @@
 		079AF1AE1FBD68A600030054 /* Application Files */ = {
 			isa = PBXGroup;
 			children = (
-				07573B1A1FBEADC100FD9F55 /* Game.hpp */,
-				07573B1B1FBEADC100FD9F55 /* Game.cpp */,
-				07573B1C1FBEADC200FD9F55 /* main.cpp */,
+				079AF1AF1FBD68A600030054 /* All Code */,
 				079AF1B61FBD68A600030054 /* Resources */,
-				079AF1AF1FBD68A600030054 /* Supporting Files */,
 			);
 			path = "Application Files";
 			sourceTree = "<group>";
 		};
-		079AF1AF1FBD68A600030054 /* Supporting Files */ = {
+		079AF1AF1FBD68A600030054 /* All Code */ = {
 			isa = PBXGroup;
 			children = (
 				07E4A73A1FC4012A00BB4A8A /* External */,
+				07D5A9BB1FED07E80091DC2E /* Local */,
+				079AF1B01FBD68A600030054 /* Info.plist */,
+			);
+			name = "All Code";
+			sourceTree = "<group>";
+		};
+		079AF1B61FBD68A600030054 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				073694CE1FC3A13700E1452F /* Graphics */,
+				0767ADCD1FBD753F00BF649A /* Audio */,
+				0791DA6B1FC38DF700873076 /* Images.xcassets */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		07D5A9BB1FED07E80091DC2E /* Local */ = {
+			isa = PBXGroup;
+			children = (
 				079916C91FBD8F020060A752 /* Helpers.hpp */,
 				079916C81FBD8F020060A752 /* Helpers.cpp */,
 				07C19A6F1FC02601002C86E6 /* Nodes.hpp */,
@@ -105,19 +121,11 @@
 				07A04E9E1FEC62F8000BE7E7 /* Ghost.cpp */,
 				077B1AE21FEC20A300A94C5E /* MazeData.hpp */,
 				0767ADB61FBD6E3800BF649A /* MazeData.cpp */,
-				079AF1B01FBD68A600030054 /* Info.plist */,
+				07573B1A1FBEADC100FD9F55 /* Game.hpp */,
+				07573B1B1FBEADC100FD9F55 /* Game.cpp */,
+				07573B1C1FBEADC200FD9F55 /* Main.cpp */,
 			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		079AF1B61FBD68A600030054 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				073694CE1FC3A13700E1452F /* Graphics */,
-				0791DA6B1FC38DF700873076 /* Images.xcassets */,
-				0767ADCD1FBD753F00BF649A /* Audio */,
-			);
-			name = Resources;
+			path = Local;
 			sourceTree = "<group>";
 		};
 		07E4A73A1FC4012A00BB4A8A /* External */ = {
@@ -224,7 +232,7 @@
 			files = (
 				0767ADC21FBD6E3900BF649A /* Player.cpp in Sources */,
 				07E4A70C1FC3BF0700BB4A8A /* AnimatedSprite.cpp in Sources */,
-				07573B1E1FBEADC200FD9F55 /* main.cpp in Sources */,
+				07573B1E1FBEADC200FD9F55 /* Main.cpp in Sources */,
 				0767ADBE1FBD6E3900BF649A /* MazeData.cpp in Sources */,
 				07573B1D1FBEADC200FD9F55 /* Game.cpp in Sources */,
 				07A04EA01FEC62F8000BE7E7 /* Ghost.cpp in Sources */,

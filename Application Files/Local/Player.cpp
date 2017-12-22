@@ -17,7 +17,7 @@ Player::Player(std::string spritesheet, size_t spritesize, size_t numberofStates
     TextureRect = textrect;
     
     setOrigin(spritesize / 2, spritesize / 2);
-    objtexture.loadFromFile("Resources/Graphics/" + spritesheet);
+    objtexture.loadFromFile(RESOURCES + "Graphics/" + spritesheet);
     state = std::shared_ptr<Animation>(new Animation[numberofStates], std::default_delete<Animation[]>());
     
     for (int i = 0; i < numberofStates; i++) {

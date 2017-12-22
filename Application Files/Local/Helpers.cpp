@@ -14,6 +14,6 @@ void ResizeView(const RenderWindow &window, View& view) { // ASPECT RATIO FUNCTI
 }
 
 Audio::Audio(std::string filename) {
-    buffer.loadFromFile("Resources/Audio/" + filename);
+    buffer.loadFromFile(RESOURCES + "Audio/" + filename);
     setBuffer(buffer);
 }
