@@ -146,9 +146,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		079AF1AB1FBD68A600030054 /* PAC-MAN 2017 */ = {
+		079AF1AB1FBD68A600030054 /* PAC-MAN */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 079AF1C11FBD68A600030054 /* Build configuration list for PBXNativeTarget "PAC-MAN 2017" */;
+			buildConfigurationList = 079AF1C11FBD68A600030054 /* Build configuration list for PBXNativeTarget "PAC-MAN" */;
 			buildPhases = (
 				079AF1A71FBD68A600030054 /* Sources */,
 				079AF1A81FBD68A600030054 /* Frameworks */,
@@ -159,7 +159,7 @@
 			);
 			dependencies = (
 			);
-			name = "PAC-MAN 2017";
+			name = "PAC-MAN";
 			productName = "PAC-MAN 2017";
 			productReference = 079AF1AC1FBD68A600030054 /* PAC-MAN 2017.app */;
 			productType = "com.apple.product-type.application";
@@ -179,7 +179,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 079AF1A61FBD68A600030054 /* Build configuration list for PBXProject "PAC-MAN 2017" */;
+			buildConfigurationList = 079AF1A61FBD68A600030054 /* Build configuration list for PBXProject "PAC-MAN" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -191,7 +191,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				079AF1AB1FBD68A600030054 /* PAC-MAN 2017 */,
+				079AF1AB1FBD68A600030054 /* PAC-MAN */,
 			);
 		};
 /* End PBXProject section */
@@ -343,7 +343,7 @@
 				DEVELOPMENT_TEAM = 6X2XSAAA2H;
 				INFOPLIST_FILE = "$(SRCROOT)/Application Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = carlosestrada.pacman17;
+				PRODUCT_BUNDLE_IDENTIFIER = carlosestrada.pacman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -356,7 +356,7 @@
 				DEVELOPMENT_TEAM = 6X2XSAAA2H;
 				INFOPLIST_FILE = "$(SRCROOT)/Application Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = carlosestrada.pacman17;
+				PRODUCT_BUNDLE_IDENTIFIER = carlosestrada.pacman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -364,7 +364,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		079AF1A61FBD68A600030054 /* Build configuration list for PBXProject "PAC-MAN 2017" */ = {
+		079AF1A61FBD68A600030054 /* Build configuration list for PBXProject "PAC-MAN" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				079AF1BF1FBD68A600030054 /* Debug */,
@@ -373,7 +373,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		079AF1C11FBD68A600030054 /* Build configuration list for PBXNativeTarget "PAC-MAN 2017" */ = {
+		079AF1C11FBD68A600030054 /* Build configuration list for PBXNativeTarget "PAC-MAN" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				079AF1C21FBD68A600030054 /* Debug */,

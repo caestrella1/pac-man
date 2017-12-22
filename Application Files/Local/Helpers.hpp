@@ -13,18 +13,13 @@
 #include <string>
 using namespace sf;
 
-#ifdef __APPLE__
-#include "ResourcePath.hpp"
-#define RESOURCES resourcePath()
-#else
-#define RESOURCES "Resources/"
-#endif
-
 #define WinX 1024
 #define WinY 1024
 #define spriteSize 42
 #define pelletSize 8
 #define powerPelletSize 26
+
+std::string resourcePath();
 
 static const float WinLength = WinX, WinHeight = WinY;
 

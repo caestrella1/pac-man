@@ -8,12 +8,16 @@
 
 #include "Helpers.hpp"
 
+std::string resourcePath() {
+    return "Application Files/Resources/";
+}
+
 void ResizeView(const RenderWindow &window, View& view) { // ASPECT RATIO FUNCTION
     float aspectRatio = float(window.getSize().x / float(window.getSize().y));
     view.setSize(WinLength * aspectRatio, WinLength);
 }
 
 Audio::Audio(std::string filename) {
-    buffer.loadFromFile(RESOURCES + "Audio/" + filename);
+    buffer.loadFromFile(resourcePath() + "Audio/" + filename);
     setBuffer(buffer);
 }

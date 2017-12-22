@@ -1,6 +1,7 @@
 .vs/
+x32/
+X64/
 Debug/
-x64/
 Release/
 .score
 *.db

@@ -10,14 +10,14 @@
 
 MazeData::MazeData() {
     // Initialize maze
-    mazeTexture.loadFromFile(RESOURCES + "Graphics/maze.png");
+    mazeTexture.loadFromFile(resourcePath() + "Graphics/maze.png");
     mazeBG.create(mazeTexture, 512, 1, 2);
     mazeBG.setScale(Vector2f(2, 2));
     mazeBG.setFrameTime(seconds(0.5));
     mazeBG.setPosition(Vector2f(WinX/2, WinY/2));
     
     // Initialize power pellets
-    powerpelletTexture.loadFromFile(RESOURCES + "Graphics/maze-ppellet.png");
+    powerpelletTexture.loadFromFile(resourcePath() + "Graphics/maze-ppellet.png");
     powerPellet = std::shared_ptr<Player>(new Player[4], std::default_delete<Player[]>());
     for (int i = 0; i < 4; i++) {
         powerPellet.get()[i].create(powerpelletTexture, 8, 1, 2);
@@ -28,7 +28,7 @@ MazeData::MazeData() {
     }
     
     // Initialize pellets
-    pelletTexture.loadFromFile(RESOURCES + "Graphics/maze-pellet.png");
+    pelletTexture.loadFromFile(resourcePath() + "Graphics/maze-pellet.png");
     pellet = std::shared_ptr<Player>(new Player[240], std::default_delete<Player[]>());
     for (int i = 0; i < 240; i++) {
         pellet.get()[i].create(pelletTexture, 8, 2, 1);
