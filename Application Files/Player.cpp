@@ -30,9 +30,9 @@ Player::Player(std::string spritesheet, size_t spritesize, size_t numberofStates
     play(state.get()[0]);
 }
 
-void Player::create(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
+void Player::create(Texture spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed) {
     setOrigin(spritesize / 2, spritesize / 2);
-    objtexture.loadFromFile("Resources/Graphics/" + spritesheet);
+    objtexture = spritesheet;
     state = std::shared_ptr<Animation>(new Animation[numberofStates], std::default_delete<Animation[]>());
 
     for (int i = 0; i < numberofStates; i++) {

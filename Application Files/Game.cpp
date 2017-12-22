@@ -180,8 +180,6 @@ void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Play
     blinky.isEdible = inky.isEdible = pinky.isEdible = clyde.isEdible = false;
     
     if (gamestate == WINNER || gamestate == STARTING || gamestate == PAUSED) {
-        maze.loadPellets(4);  maze.placePellets(4);
-        maze.loadPellets(240); maze.placePellets(240);
-
+        maze.placePellets();
     }
 }

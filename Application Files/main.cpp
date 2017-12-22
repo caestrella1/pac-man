@@ -19,22 +19,12 @@ int main() {
     float edibleTime = 0.0, fruitTime = 0.0;
     
     /*** VARIABLES ***/
+    MazeData maze;
     int ghostCount = 0, pelletCount = 0, lifeCount = 4, lifeScore = 10000;
     int gamestate = STARTING, level = 1, score = 0, hiscore = getHighScore();
     bool atLeastOneEdible = false, showFruit = false;
     float looppitch = 1.00, edibleLimit = 10.0;
     std::ostringstream ss;
-
-    /*** MAZE ***/
-    Player mazeBG("maze.png", 512, 1, 2);
-    mazeBG.setScale(Vector2f(2, 2));
-    mazeBG.setFrameTime(seconds(0.5));
-    mazeBG.setPosition(Vector2f(WinX/2, WinY/2));
-
-    MazeData maze;
-    maze.loadPellets(4);  maze.placePellets(4);
-    maze.loadPellets(240); maze.placePellets(240);
-    maze.placeNodes(); maze.setValidNodeMovements();
 
     /*** TEXT ***/
     Font font; font.loadFromFile("Resources/Graphics/font.ttf");
@@ -167,7 +157,6 @@ int main() {
     quitText.setPosition(Vector2f(435, 450));
     controlText.setPosition(Vector2f(435, 550));
     WASDText.setPosition(Vector2f(435, 600));
-    std::vector<Text> pausemenu {continueText, restartText, quitText, WASDText};
     // END PAUSE STATE
 
     /******************** MAIN GAME LOOP ********************/
@@ -301,7 +290,7 @@ int main() {
         }
         else if (gamestate == WINNER) {
             float elapsedTime = startClock.getElapsedTime().asSeconds();
-            mazeBG.update(deltaTime);
+            maze.mazeBG.update(deltaTime);
             if (elapsedTime >= 3.0) {
                 setDifficulty(blinky, inky, pinky, clyde, edibleLimit);
                 soundSwitcher(atLeastOneEdible, gamestate, siren, scatter);
@@ -455,7 +444,7 @@ int main() {
 
         /*** DRAWING ***/
         // ALWAYS DRAWING
-        window.draw(mazeBG);
+        window.draw(maze.mazeBG);
         window.draw(playerScore);
         window.draw(playerHiScore);
         window.draw(hiScoreText);

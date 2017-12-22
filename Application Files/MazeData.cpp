@@ -8,211 +8,219 @@
 #include "MazeData.hpp"
 #include <sstream>
 
-void MazeData::loadPellets(int arraySize) {
-	if (arraySize == 4) {
-        powerPellet = std::shared_ptr<Player>(new Player[arraySize], std::default_delete<Player[]>());
-		for (int i = 0; i < arraySize; i++) {
-            powerPellet.get()[i].create("maze-ppellet.png", 8, 1, 2);
-            powerPellet.get()[i].setFrameTime(seconds(0.5));
-            powerPellet.get()[i].setOrigin(4, 4);
-            powerPellet.get()[i].setScale(3, 3);
-            powerPellet.get()[i].play();
-		}
-	}
-	else if (arraySize == 240) {
-        pellet = std::shared_ptr<Player>(new Player[arraySize], std::default_delete<Player[]>());
-		for (int i = 0; i < arraySize; i++) {
-            pellet.get()[i].create("maze-pellet.png", 8, 2, 1);
-            pellet.get()[i].setOrigin(4, 4);
-            pellet.get()[i].play();
-		}
-	}
-}
-
-void MazeData::placePellets(int arraySize) {
-	// Power Pellets
-	if (arraySize == 4) {
-		powerPellet.get()[0].setPosition(Vector2f(157, 179));	// top left
-		powerPellet.get()[1].setPosition(Vector2f(157, 746));	// bottom left
-		powerPellet.get()[2].setPosition(Vector2f(869, 179));	// top right
-		powerPellet.get()[3].setPosition(Vector2f(869, 746)); // bottom right
-	}
-	// Pellets
-	else if (arraySize == 240) {
-		// ROW 1 LEFT
-		for (int i = 0; i < 12; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * i), 121));
-		}
-		// ROW 1 RIGHT
-		for (int i = 12; i < 24; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i + 2)), 121));
-		}
-
-		// ROW 2
-		for (int i = 24; i < 50; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 24)), 235));
-		}
-
-		// ROW 3 LEFT 1
-		for (int i = 50; i < 56; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 50)), 319));
-		}
-		// ROW 3 LEFT 2
-		for (int i = 56; i < 60; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 48)), 319));
-		}
-
-		// ROW 3 RIGHT 1
-		for (int i = 60; i < 64; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 46)), 319));
-		}
-
-		// ROW 3 RIGHT 2
-		for (int i = 64; i < 70; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 44)), 319));
-		}
-
-		// ROW 4 LEFT
-		for (int i = 70; i < 82; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 70)), 659));
-		}
-		// ROW 4 RIGHT
-		for (int i = 82; i < 94; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 68)), 659));
-		}
-
-		// ROW 5 LEFT 1
-		for (int i = 94; i < 96; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 93)), 746));
-		}
-		// ROW 5 LEFT 2
-		for (int i = 96; i < 103; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 91)), 746));
-		}
-		// ROW 5 RIGHT 1
-		for (int i = 103; i < 110; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 89)), 746));
-		}
-		// ROW 5 RIGHT 2
-		for (int i = 110; i < 112; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 87)), 746));
-		}
-
-		// ROW 6 LEFT 1
-		for (int i = 112; i < 118; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 112)), 830));
-		}
-		// ROW 6 LEFT 2
-		for (int i = 118; i < 122; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 110)), 830));
-		}
-		// ROW 6 RIGHT 1
-		for (int i = 122; i < 126; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 108)), 830));
-		}
-		// ROW 6 RIGHT 2
-		for (int i = 126; i < 132; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 106)), 830));
-		}
-		// ROW 7
-		for (int i = 132; i < 158; i++) {
-			pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 132)), 916));
-		}
-
-		// COLUMN 1
-		pellet.get()[158].setPosition(Vector2f(157, 121 + (28.5 * (1))));
-		pellet.get()[159].setPosition(Vector2f(157, 121 + (28.5 * (3))));
-		pellet.get()[160].setPosition(Vector2f(157, 121 + (28.5 * (5))));
-		pellet.get()[161].setPosition(Vector2f(157, 121 + (28.5 * (6))));
-		pellet.get()[162].setPosition(Vector2f(157, 121 + (28.5 * (20))));
-		pellet.get()[163].setPosition(Vector2f(157, 121 + (28.5 * (21))));
-		pellet.get()[164].setPosition(Vector2f(157, 121 + (28.5 * (26))));
-		pellet.get()[165].setPosition(Vector2f(157, 121 + (28.5 * (27))));
-
-		// COLUMN 2
-		pellet.get()[166].setPosition(Vector2f(214, 121 + (28.5 * (23))));
-		pellet.get()[167].setPosition(Vector2f(214, 121 + (28.5 * (24))));
-
-		// COLUMN 3
-		pellet.get()[168].setPosition(Vector2f(299, 121 + (28.5 * (1))));
-		pellet.get()[169].setPosition(Vector2f(299, 121 + (28.5 * (2))));
-		pellet.get()[170].setPosition(Vector2f(299, 121 + (28.5 * (3))));
-		pellet.get()[171].setPosition(Vector2f(299, 121 + (28.5 * (5))));
-		pellet.get()[172].setPosition(Vector2f(299, 121 + (28.5 * (6))));
-		for (int i = 173; i < 184; i++) {
-			pellet.get()[i].setPosition(Vector2f(299, 121 + (28.5 * (i - 165))));
-		}
-		pellet.get()[184].setPosition(Vector2f(299, 121 + (28.5 * (20))));
-		pellet.get()[185].setPosition(Vector2f(299, 121 + (28.5 * (21))));
-		pellet.get()[186].setPosition(Vector2f(299, 121 + (28.5 * (23))));
-		pellet.get()[187].setPosition(Vector2f(299, 121 + (28.5 * (24))));
-
-		// COLUMN 4
-		pellet.get()[188].setPosition(Vector2f(385, 121 + (28.5 * (5))));
-		pellet.get()[189].setPosition(Vector2f(385, 121 + (28.5 * (6))));
-		pellet.get()[190].setPosition(Vector2f(385, 121 + (28.5 * (23))));
-		pellet.get()[191].setPosition(Vector2f(385, 121 + (28.5 * (24))));
-
-		// COLUMN 5
-		pellet.get()[192].setPosition(Vector2f(470, 121 + (28.5 * (1))));
-		pellet.get()[193].setPosition(Vector2f(470, 121 + (28.5 * (2))));
-		pellet.get()[194].setPosition(Vector2f(470, 121 + (28.5 * (3))));
-		pellet.get()[195].setPosition(Vector2f(470, 121 + (28.5 * (20))));
-		pellet.get()[196].setPosition(Vector2f(470, 121 + (28.5 * (21))));
-		pellet.get()[197].setPosition(Vector2f(470, 121 + (28.5 * (26))));
-		pellet.get()[198].setPosition(Vector2f(470, 121 + (28.5 * (27))));
-
-		// HALF WAY POINT (ALL VERTICAL COLUMNS CAN BE MIRRORED)
-
-		// COLUMN 6
-		pellet.get()[199].setPosition(Vector2f(556, 121 + (28.5 * (1))));
-		pellet.get()[200].setPosition(Vector2f(556, 121 + (28.5 * (2))));
-		pellet.get()[201].setPosition(Vector2f(556, 121 + (28.5 * (3))));
-		pellet.get()[202].setPosition(Vector2f(556, 121 + (28.5 * (20))));
-		pellet.get()[203].setPosition(Vector2f(556, 121 + (28.5 * (21))));
-		pellet.get()[204].setPosition(Vector2f(556, 121 + (28.5 * (26))));
-		pellet.get()[205].setPosition(Vector2f(556, 121 + (28.5 * (27))));
-
-		// COLUMN 7
-		pellet.get()[206].setPosition(Vector2f(641, 121 + (28.5 * (5))));
-		pellet.get()[207].setPosition(Vector2f(641, 121 + (28.5 * (6))));
-		pellet.get()[208].setPosition(Vector2f(641, 121 + (28.5 * (23))));
-		pellet.get()[209].setPosition(Vector2f(641, 121 + (28.5 * (24))));
-
-		// COLUMN 8
-		pellet.get()[210].setPosition(Vector2f(727, 121 + (28.5 * (1))));
-		pellet.get()[211].setPosition(Vector2f(727, 121 + (28.5 * (2))));
-		pellet.get()[212].setPosition(Vector2f(727, 121 + (28.5 * (3))));
-		pellet.get()[213].setPosition(Vector2f(727, 121 + (28.5 * (5))));
-		pellet.get()[214].setPosition(Vector2f(727, 121 + (28.5 * (6))));
-		for (int i = 215; i < 226; i++) {
-			pellet.get()[i].setPosition(Vector2f(727, 121 + (28.5 * (i - 207))));
-		}
-		pellet.get()[226].setPosition(Vector2f(727, 121 + (28.5 * (20))));
-		pellet.get()[227].setPosition(Vector2f(727, 121 + (28.5 * (21))));
-		pellet.get()[228].setPosition(Vector2f(727, 121 + (28.5 * (23))));
-		pellet.get()[229].setPosition(Vector2f(727, 121 + (28.5 * (24))));
-
-		// COLUMN 9
-		pellet.get()[230].setPosition(Vector2f(812, 121 + (28.5 * (23))));
-		pellet.get()[231].setPosition(Vector2f(812, 121 + (28.5 * (24))));
-
-		// COLUMN 10
-		pellet.get()[232].setPosition(Vector2f(869, 121 + (28.5 * (1))));
-		pellet.get()[233].setPosition(Vector2f(869, 121 + (28.5 * (3))));
-		pellet.get()[234].setPosition(Vector2f(869, 121 + (28.5 * (5))));
-		pellet.get()[235].setPosition(Vector2f(869, 121 + (28.5 * (6))));
-		pellet.get()[236].setPosition(Vector2f(869, 121 + (28.5 * (20))));
-		pellet.get()[237].setPosition(Vector2f(869, 121 + (28.5 * (21))));
-		pellet.get()[238].setPosition(Vector2f(869, 121 + (28.5 * (26))));
-		pellet.get()[239].setPosition(Vector2f(869, 121 + (28.5 * (27))));
-	}
-}
-
-void MazeData::placeNodes() {
+MazeData::MazeData() {
+    // Initialize maze
+    mazeTexture.loadFromFile("Resources/Graphics/maze.png");
+    mazeBG.create(mazeTexture, 512, 1, 2);
+    mazeBG.setScale(Vector2f(2, 2));
+    mazeBG.setFrameTime(seconds(0.5));
+    mazeBG.setPosition(Vector2f(WinX/2, WinY/2));
+    
+    // Initialize power pellets
+    powerpelletTexture.loadFromFile("Resources/Graphics/maze-ppellet.png");
+    powerPellet = std::shared_ptr<Player>(new Player[4], std::default_delete<Player[]>());
+    for (int i = 0; i < 4; i++) {
+        powerPellet.get()[i].create(powerpelletTexture, 8, 1, 2);
+        powerPellet.get()[i].setFrameTime(seconds(0.5));
+        powerPellet.get()[i].setOrigin(4, 4);
+        powerPellet.get()[i].setScale(3, 3);
+        powerPellet.get()[i].play();
+    }
+    
+    // Initialize pellets
+    pelletTexture.loadFromFile("Resources/Graphics/maze-pellet.png");
+    pellet = std::shared_ptr<Player>(new Player[240], std::default_delete<Player[]>());
+    for (int i = 0; i < 240; i++) {
+        pellet.get()[i].create(pelletTexture, 8, 2, 1);
+        pellet.get()[i].setOrigin(4, 4);
+        pellet.get()[i].play();
+    }
+    
+    // Initialize all nodes
     ghostNode = std::shared_ptr<Node>(new Node[7], std::default_delete<Node[]>());
     node = std::shared_ptr<Node>(new Node[65], std::default_delete<Node[]>());
     
+    placePellets(); placeNodes(); setValidNodeMovements();
+}
+
+void MazeData::placePellets() {
+	// Power Pellets
+    powerPellet.get()[0].setPosition(Vector2f(157, 179));   // top left
+    powerPellet.get()[1].setPosition(Vector2f(157, 746));   // bottom left
+    powerPellet.get()[2].setPosition(Vector2f(869, 179));   // top right
+    powerPellet.get()[3].setPosition(Vector2f(869, 746));   // bottom right
+    
+	// Pellets
+    // ROW 1 LEFT
+    for (int i = 0; i < 12; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * i), 121));
+    }
+    // ROW 1 RIGHT
+    for (int i = 12; i < 24; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i + 2)), 121));
+    }
+    
+    // ROW 2
+    for (int i = 24; i < 50; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 24)), 235));
+    }
+    
+    // ROW 3 LEFT 1
+    for (int i = 50; i < 56; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 50)), 319));
+    }
+    // ROW 3 LEFT 2
+    for (int i = 56; i < 60; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 48)), 319));
+    }
+    
+    // ROW 3 RIGHT 1
+    for (int i = 60; i < 64; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 46)), 319));
+    }
+    
+    // ROW 3 RIGHT 2
+    for (int i = 64; i < 70; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 44)), 319));
+    }
+    
+    // ROW 4 LEFT
+    for (int i = 70; i < 82; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 70)), 659));
+    }
+    // ROW 4 RIGHT
+    for (int i = 82; i < 94; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 68)), 659));
+    }
+    
+    // ROW 5 LEFT 1
+    for (int i = 94; i < 96; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 93)), 746));
+    }
+    // ROW 5 LEFT 2
+    for (int i = 96; i < 103; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 91)), 746));
+    }
+    // ROW 5 RIGHT 1
+    for (int i = 103; i < 110; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 89)), 746));
+    }
+    // ROW 5 RIGHT 2
+    for (int i = 110; i < 112; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 87)), 746));
+    }
+    
+    // ROW 6 LEFT 1
+    for (int i = 112; i < 118; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 112)), 830));
+    }
+    // ROW 6 LEFT 2
+    for (int i = 118; i < 122; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 110)), 830));
+    }
+    // ROW 6 RIGHT 1
+    for (int i = 122; i < 126; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 108)), 830));
+    }
+    // ROW 6 RIGHT 2
+    for (int i = 126; i < 132; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 106)), 830));
+    }
+    // ROW 7
+    for (int i = 132; i < 158; i++) {
+        pellet.get()[i].setPosition(Vector2f(157 + (28.5 * (i - 132)), 916));
+    }
+    
+    // COLUMN 1
+    pellet.get()[158].setPosition(Vector2f(157, 121 + (28.5 * (1))));
+    pellet.get()[159].setPosition(Vector2f(157, 121 + (28.5 * (3))));
+    pellet.get()[160].setPosition(Vector2f(157, 121 + (28.5 * (5))));
+    pellet.get()[161].setPosition(Vector2f(157, 121 + (28.5 * (6))));
+    pellet.get()[162].setPosition(Vector2f(157, 121 + (28.5 * (20))));
+    pellet.get()[163].setPosition(Vector2f(157, 121 + (28.5 * (21))));
+    pellet.get()[164].setPosition(Vector2f(157, 121 + (28.5 * (26))));
+    pellet.get()[165].setPosition(Vector2f(157, 121 + (28.5 * (27))));
+    
+    // COLUMN 2
+    pellet.get()[166].setPosition(Vector2f(214, 121 + (28.5 * (23))));
+    pellet.get()[167].setPosition(Vector2f(214, 121 + (28.5 * (24))));
+    
+    // COLUMN 3
+    pellet.get()[168].setPosition(Vector2f(299, 121 + (28.5 * (1))));
+    pellet.get()[169].setPosition(Vector2f(299, 121 + (28.5 * (2))));
+    pellet.get()[170].setPosition(Vector2f(299, 121 + (28.5 * (3))));
+    pellet.get()[171].setPosition(Vector2f(299, 121 + (28.5 * (5))));
+    pellet.get()[172].setPosition(Vector2f(299, 121 + (28.5 * (6))));
+    for (int i = 173; i < 184; i++) {
+        pellet.get()[i].setPosition(Vector2f(299, 121 + (28.5 * (i - 165))));
+    }
+    pellet.get()[184].setPosition(Vector2f(299, 121 + (28.5 * (20))));
+    pellet.get()[185].setPosition(Vector2f(299, 121 + (28.5 * (21))));
+    pellet.get()[186].setPosition(Vector2f(299, 121 + (28.5 * (23))));
+    pellet.get()[187].setPosition(Vector2f(299, 121 + (28.5 * (24))));
+    
+    // COLUMN 4
+    pellet.get()[188].setPosition(Vector2f(385, 121 + (28.5 * (5))));
+    pellet.get()[189].setPosition(Vector2f(385, 121 + (28.5 * (6))));
+    pellet.get()[190].setPosition(Vector2f(385, 121 + (28.5 * (23))));
+    pellet.get()[191].setPosition(Vector2f(385, 121 + (28.5 * (24))));
+    
+    // COLUMN 5
+    pellet.get()[192].setPosition(Vector2f(470, 121 + (28.5 * (1))));
+    pellet.get()[193].setPosition(Vector2f(470, 121 + (28.5 * (2))));
+    pellet.get()[194].setPosition(Vector2f(470, 121 + (28.5 * (3))));
+    pellet.get()[195].setPosition(Vector2f(470, 121 + (28.5 * (20))));
+    pellet.get()[196].setPosition(Vector2f(470, 121 + (28.5 * (21))));
+    pellet.get()[197].setPosition(Vector2f(470, 121 + (28.5 * (26))));
+    pellet.get()[198].setPosition(Vector2f(470, 121 + (28.5 * (27))));
+    
+    // HALF WAY POINT (ALL VERTICAL COLUMNS CAN BE MIRRORED)
+    
+    // COLUMN 6
+    pellet.get()[199].setPosition(Vector2f(556, 121 + (28.5 * (1))));
+    pellet.get()[200].setPosition(Vector2f(556, 121 + (28.5 * (2))));
+    pellet.get()[201].setPosition(Vector2f(556, 121 + (28.5 * (3))));
+    pellet.get()[202].setPosition(Vector2f(556, 121 + (28.5 * (20))));
+    pellet.get()[203].setPosition(Vector2f(556, 121 + (28.5 * (21))));
+    pellet.get()[204].setPosition(Vector2f(556, 121 + (28.5 * (26))));
+    pellet.get()[205].setPosition(Vector2f(556, 121 + (28.5 * (27))));
+    
+    // COLUMN 7
+    pellet.get()[206].setPosition(Vector2f(641, 121 + (28.5 * (5))));
+    pellet.get()[207].setPosition(Vector2f(641, 121 + (28.5 * (6))));
+    pellet.get()[208].setPosition(Vector2f(641, 121 + (28.5 * (23))));
+    pellet.get()[209].setPosition(Vector2f(641, 121 + (28.5 * (24))));
+    
+    // COLUMN 8
+    pellet.get()[210].setPosition(Vector2f(727, 121 + (28.5 * (1))));
+    pellet.get()[211].setPosition(Vector2f(727, 121 + (28.5 * (2))));
+    pellet.get()[212].setPosition(Vector2f(727, 121 + (28.5 * (3))));
+    pellet.get()[213].setPosition(Vector2f(727, 121 + (28.5 * (5))));
+    pellet.get()[214].setPosition(Vector2f(727, 121 + (28.5 * (6))));
+    for (int i = 215; i < 226; i++) {
+        pellet.get()[i].setPosition(Vector2f(727, 121 + (28.5 * (i - 207))));
+    }
+    pellet.get()[226].setPosition(Vector2f(727, 121 + (28.5 * (20))));
+    pellet.get()[227].setPosition(Vector2f(727, 121 + (28.5 * (21))));
+    pellet.get()[228].setPosition(Vector2f(727, 121 + (28.5 * (23))));
+    pellet.get()[229].setPosition(Vector2f(727, 121 + (28.5 * (24))));
+    
+    // COLUMN 9
+    pellet.get()[230].setPosition(Vector2f(812, 121 + (28.5 * (23))));
+    pellet.get()[231].setPosition(Vector2f(812, 121 + (28.5 * (24))));
+    
+    // COLUMN 10
+    pellet.get()[232].setPosition(Vector2f(869, 121 + (28.5 * (1))));
+    pellet.get()[233].setPosition(Vector2f(869, 121 + (28.5 * (3))));
+    pellet.get()[234].setPosition(Vector2f(869, 121 + (28.5 * (5))));
+    pellet.get()[235].setPosition(Vector2f(869, 121 + (28.5 * (6))));
+    pellet.get()[236].setPosition(Vector2f(869, 121 + (28.5 * (20))));
+    pellet.get()[237].setPosition(Vector2f(869, 121 + (28.5 * (21))));
+    pellet.get()[238].setPosition(Vector2f(869, 121 + (28.5 * (26))));
+    pellet.get()[239].setPosition(Vector2f(869, 121 + (28.5 * (27))));
+}
+
+void MazeData::placeNodes() {
     ghostNode.get()[0].setPosition(Vector2f(512, 405));
     ghostNode.get()[1].setPosition(Vector2f(463, 475));
 	ghostNode.get()[2].setPosition(Vector2f(512, 475));

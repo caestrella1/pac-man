@@ -50,7 +50,7 @@ public:
     
     Player(float speed = 10);
     Player(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed = 10);
-    void create(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed = 10);
+    void create(Texture spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed = 10);
     
     IntRect getTextureRect();
     

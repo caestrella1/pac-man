@@ -9,18 +9,19 @@
 #include "Collision.hpp"
 
 class MazeData {
-	Texture fruitTexture;
+	Texture mazeTexture, pelletTexture, powerpelletTexture;
 
 public:
+    Player mazeBG;
+    
+    MazeData();
     std::shared_ptr<Player> powerPellet;
     std::shared_ptr<Player> pellet;
 
     std::shared_ptr<Node> node;
     std::shared_ptr<Node> ghostNode;
 
-	void loadPellets(int arraySize);
-	void placePellets(int arraySize);
-
+	void placePellets();
 	void placeNodes();
     void setValidNodeMovements();
     void teleportPlayer(Player &player);
