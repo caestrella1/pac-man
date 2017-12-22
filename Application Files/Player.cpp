@@ -68,14 +68,8 @@ void Player::manageState() {
     }
 }
 
-void Player::setPlayerSpeed(float speed) {
-    #ifdef __APPLE__
-        #define SCALE 120
-    #else
-        #define SCALE 60
-    #endif
-    
-    m_speed = speed / SCALE;
+void Player::setPlayerSpeed(float speed) {    
+    m_speed = speed / 120;
 }
 
 void Player::setAnimationSpeed(float speed) {

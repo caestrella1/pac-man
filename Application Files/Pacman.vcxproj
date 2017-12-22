@@ -167,6 +167,7 @@
     <ClInclude Include="External\Animation.hpp" />
     <ClInclude Include="External\Collision.hpp" />
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="Ghost.hpp" />
     <ClInclude Include="Helpers.hpp" />
     <ClInclude Include="MazeData.hpp" />
     <ClInclude Include="Nodes.hpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="External\Animation.cpp" />
     <ClCompile Include="External\Collision.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MazeData.cpp" />

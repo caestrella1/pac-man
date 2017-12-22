@@ -45,6 +45,9 @@
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="Ghost.hpp">
+      <Filter>My Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\AnimatedSprite.cpp">
@@ -72,6 +75,9 @@
       <Filter>My Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
+      <Filter>My Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ghost.cpp">
       <Filter>My Source Files</Filter>
     </ClCompile>
   </ItemGroup>
