@@ -41,6 +41,7 @@ MazeData::MazeData() {
     node = std::shared_ptr<Node>(new Node[65], std::default_delete<Node[]>());
     
     placePellets(); placeNodes(); setValidNodeMovements();
+    mazeBG.pause();
 }
 
 void MazeData::placePellets() {
@@ -432,6 +433,23 @@ void MazeData::teleportPlayer(Player &player) {
     }
     else if (player.getPosition().y >= WinY) {
         player.setPosition(Vector2f(player.getPosition().x, 0));
+    }
+}
+
+void MazeData::draw(RenderWindow &window, Time &deltaTime) {
+    window.draw(mazeBG);
+    
+    for (int i = 0; i < 240; i++) {   // SMALL PELLETS
+        if (pellet.get()[i].getPosition().y <= WinY) {
+            window.draw(pellet.get()[i]);
+        }
+    }
+    
+    for (int i = 0; i < 4; i++) {       // POWER PELLETS
+        if (powerPellet.get()[i].getPosition().y <= WinY) {
+            powerPellet.get()[i].update(deltaTime);
+            window.draw(powerPellet.get()[i]);
+        }
     }
 }
 

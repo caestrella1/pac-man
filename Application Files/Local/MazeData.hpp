@@ -25,4 +25,6 @@ public:
 	void placeNodes();
     void setValidNodeMovements();
     void teleportPlayer(Player &player);
+    
+    void draw(RenderWindow &window, Time &deltaTime);
 };

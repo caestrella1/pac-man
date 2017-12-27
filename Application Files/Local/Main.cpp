@@ -258,13 +258,6 @@ int main() {
         }    // END OF WINDOW EVENTS POLLING
 
         /*** CHARACTER ANIMATIONS ***/
-        pacman.update(deltaTime);
-        blinky.update(deltaTime);
-        inky.update(deltaTime);
-        pinky.update(deltaTime);
-        clyde.update(deltaTime);
-        // END CHARACTER ANIMATIONS
-
         if (gamestate == STARTING) {
             startTime = startClock.getElapsedTime();
             pacman.manageState();
@@ -280,7 +273,7 @@ int main() {
             float elapsedTime = startClock.getElapsedTime().asSeconds();
             if (elapsedTime >= 1.3) {
                 resetGame(pacman, blinky, inky, pinky, clyde, maze, gamestate);
-                lifeCount--;    // DEDUCT LIFE AFTER DEATH ANIMATION
+                lifeCount--;
                 lifeCount < 0 ? gamestate = LOSER : gamestate = STARTING;
                 if (gamestate == LOSER && score >= hiscore) {
                     saveHighScore(hiscore);
@@ -290,7 +283,6 @@ int main() {
         }
         else if (gamestate == WINNER) {
             float elapsedTime = startClock.getElapsedTime().asSeconds();
-            maze.mazeBG.update(deltaTime);
             if (elapsedTime >= 3.0) {
                 setDifficulty(blinky, inky, pinky, clyde, edibleLimit);
                 soundSwitcher(atLeastOneEdible, gamestate, siren, scatter);
@@ -300,7 +292,7 @@ int main() {
                 gamestate = STARTING;
             }
         }
-        else if (gamestate == PLAYING) {       // MAIN GAME LOOP
+        else if (gamestate == PLAYING) {       /*** PLAYING GAME LOOP ***/
             if (pelletCount >= 244) {
                 startClock.restart().asSeconds();
                 gamestate = WINNER;
@@ -347,7 +339,6 @@ int main() {
                 }
             }
 
-
             /*** PELLET LOGIC ***/
             for (int i = 0; i < 240; i++) {   // SMALL PELLETS
                 if (checkCollision(pacman, maze.pellet.get()[i])) {
@@ -382,10 +373,9 @@ int main() {
                         looppitch += 0.025;        // INCREASE PITCH EVERY 50 PELLETS
                         siren.setPitch(looppitch);
                     }
-
                     maze.powerPellet.get()[i].setPosition(Vector2f(0, WinY * 10));
                 }
-            }    // END PELLET LOGIC
+            }
 
             /*** FRUIT LOGIC ***/
             startTime = startClock.getElapsedTime();
@@ -411,25 +401,24 @@ int main() {
                             default: score = score + 2000;
                                 break;
                         }
-
                         updatePoints(ss, score, playerScore);
                         eatfruit.play();
                         showFruit = false;
                     }
                 }
-                if (fruitTime >= 9.99 && fruitTime <= 10.0)
+                if (fruitTime >= 9.99 && fruitTime <= 10.0) {
                     showFruit = false;
+                }
             }
-            // END FRUIT LOGIC
 
-            // Teleports players to opposite x-coordinate when off screen
+            // Teleports players to opposite side if out of bounds
             maze.teleportPlayer(pacman);
             maze.teleportPlayer(blinky);
             maze.teleportPlayer(pinky);
             maze.teleportPlayer(inky);
             maze.teleportPlayer(clyde);
             
-        }    // MAIN GAME LOOP END
+        }    // PLAYING GAME LOOP END
         
         // MOVE AFTER TOUCHING NODE
         pacman.movePlayer(deltaTime, gamestate);
@@ -437,31 +426,24 @@ int main() {
         inky.moveGhost(deltaTime, gamestate, edibleTime, edibleLimit);
         pinky.moveGhost(deltaTime, gamestate, edibleTime, edibleLimit);
         clyde.moveGhost(deltaTime, gamestate, edibleTime, edibleLimit);
-        // END CHARACTER MOVEMENT
+        
+        maze.mazeBG.update(deltaTime);
+        fruit.update(deltaTime);
+        pacman.update(deltaTime);
+        blinky.update(deltaTime);
+        inky.update(deltaTime);
+        pinky.update(deltaTime);
+        clyde.update(deltaTime);
 
         window.setView(view);
         window.clear();
 
         /*** DRAWING ***/
-        // ALWAYS DRAWING
-        window.draw(maze.mazeBG);
+        maze.draw(window, deltaTime);
         window.draw(playerScore);
         window.draw(playerHiScore);
         window.draw(hiScoreText);
         window.draw(sound);
-        
-        for (int i = 0; i < 240; i++) {   // SMALL PELLETS
-            if (maze.pellet.get()[i].getPosition().y <= WinY) {
-                window.draw(maze.pellet.get()[i]);
-            }
-        }
-
-        for (int i = 0; i < 4; i++) {       // POWER PELLETS
-            if (maze.powerPellet.get()[i].getPosition().y <= WinY) {
-                maze.powerPellet.get()[i].update(deltaTime);
-                window.draw(maze.powerPellet.get()[i]);
-            }
-        }
 
         for (int i = 0; i < lifeCount; i++) {
             window.draw(lives[i]);
@@ -470,14 +452,6 @@ int main() {
         int fruitlimit = level < 7 ? level : 6;
         for (int i = 0; i < fruitlimit; i++) {
             window.draw(fruitSprite[i]);
-        }
-
-        // CONDITIONAL DRAWING
-        if (gamestate == PLAYING) {
-            fruit.update(deltaTime);
-            if (showFruit) {
-                window.draw(fruit);
-            }
         }
 
         if (gamestate != LOSER) {
@@ -492,11 +466,20 @@ int main() {
 
         if (gamestate == STARTING) {
             window.draw(ready);
+            maze.mazeBG.pause();
+        }
+        else if (gamestate == PLAYING) {
+            if (showFruit) {
+                window.draw(fruit);
+            }
         }
         else if (gamestate == LOSER) {
             window.draw(gameover);
         }
-        else if (gamestate == PAUSED) {   // PAUSE MENU
+        else if (gamestate == WINNER) {
+            maze.mazeBG.play();
+        }
+        else if (gamestate == PAUSED) {
             window.draw(pauseOpacity);
             window.draw(pauseMenu);
             window.draw(paused);
@@ -507,8 +490,6 @@ int main() {
             window.draw(select);
             window.draw(WASDText);
         }
-        // END DRAWING
-
         window.display();
     }
     return 0;

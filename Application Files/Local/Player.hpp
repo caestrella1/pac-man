@@ -44,7 +44,7 @@ class Player : public AnimatedSprite {
     
 public:
     int direction = NONE, queueDirection = NONE, tryDirection = NONE;
-    bool WASDkeys = true, isEdible = false;
+    bool WASDkeys = true;
     Vector2f movement;
     float m_speed;
     

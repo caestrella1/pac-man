@@ -13,6 +13,8 @@
 
 class Ghost : public Player {
 public:
+    bool isEdible = false;
+    
     Ghost(float speed = 10);
     Ghost(std::string spritesheet, size_t spritesize, size_t numberofStates, size_t framesperState, float speed = 10);
     

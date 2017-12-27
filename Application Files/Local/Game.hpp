@@ -11,10 +11,9 @@
 #include "MazeData.hpp"
 #include <sstream>
 #include <fstream>
-#include <iostream>
 
 // GHOST LOGIC
-void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score,
+void ghostCollisions(Player &pacman, Ghost &ghost, Audio &eatghost, int &ghostCount, int &score,
                      int &gamestate, Audio &death, bool &edible, Clock &startClock);
 
 void managePlayerState(Player &pacman);
@@ -39,7 +38,7 @@ void toggleMute(bool &isMuted, Player &sound, Audio &chomp1, Audio &chomp2, Audi
 void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, int &level, float &looppitch,
                 Player &fruit, std::ostringstream &ss, Text &playerScore, Clock &startClock);
 
-void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde,
+void resetGame(Player &pacman, Ghost &blinky, Ghost &inky, Ghost &pinky, Ghost &clyde,
                MazeData &maze, int &gamestate);
 
 #endif /* Game_hpp */

@@ -9,7 +9,7 @@
 #include "Game.hpp"
 
 /***** GHOST LOGIC *****/
-void ghostCollisions(Player &pacman, Player &ghost, Audio &eatghost, int &ghostCount, int &score,
+void ghostCollisions(Player &pacman, Ghost &ghost, Audio &eatghost, int &ghostCount, int &score,
                      int &gamestate, Audio &death, bool &edible, Clock &startClock) {
     Vector2f position(512, 501);
     if (checkCollision(pacman, ghost) && ghost.isEdible) {
@@ -164,7 +164,7 @@ void resetStats(int &lifeCount, int &pelletCount, int &score, int &lifeScore, in
     startClock.restart().asSeconds();
 }
 
-void resetGame(Player &pacman, Player &blinky, Player &inky, Player &pinky, Player &clyde, MazeData &maze, int &gamestate) {
+void resetGame(Player &pacman, Ghost &blinky, Ghost &inky, Ghost &pinky, Ghost &clyde, MazeData &maze, int &gamestate) {
     Vector2f pacmanPos(512, 746), blinkyPos(512, 405), inkyPos(463, 501), pinkyPos(512, 501), clydePos(562, 501);
     
     pacman.setPosition(pacmanPos);
